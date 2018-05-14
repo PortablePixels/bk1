@@ -52,7 +52,7 @@ module.exports = function(botkit) {
     botkit.studio = {
       run: function(bot, script_name, user, channel, input_message) {
         return new Promise(function(resolve, reject) {
-          botkit.api.getScript(options.script, user).then(function(script) {
+          botkit.api.getScript(script_name, user).then(function(script) {
             var state = {
               cursor: 0,
               turn: 0,
