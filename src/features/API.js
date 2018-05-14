@@ -3,11 +3,13 @@ var debug = require('debug')('botkit:api');
 
 module.exports = function(botkit) {
 
-    botkit.studio = {};
-
     if (botkit.config.studio_token) {
         botkit.api = new require('botkit-studio-sdk')(botkit.config);
     }
+
+
+    
+
 
     // function evaluateMessage(message) {
     //     return new Promise(function(resolve, reject) {

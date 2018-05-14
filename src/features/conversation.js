@@ -265,7 +265,7 @@ module.exports = function(botkit) {
             var that = this;
             return new Promise(function(resolve, reject) {
                 debug('SWITCHING SCRIPT FROM ', that.script.command,'TO',options.script);
-                botkit.api.getScript(options.script).then(function(script) {
+                botkit.api.getScript(options.script, that.context.user).then(function(script) {
 
                       botkit.middleware.afterScript.run(that, function(err, that) {
 

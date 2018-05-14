@@ -50,6 +50,26 @@ module.exports = function(botkit) {
 
 
     botkit.studio = {
+      run: function(bot, script_name, user, channel, input_message) {
+        return new Promise(function(resolve, reject) {
+          botkit.api.getScript(options.script, user).then(function(script) {
+            var state = {
+              cursor: 0,
+              turn: 0,
+              thread: 'default',
+              vars: {
+                user: {}
+              }
+            }
+            var convo = botkit.createConversation(input_message, bot, state, script);
+            convo.setUser(user);
+            convo.setChannel(channel);
+            convo.fulfill();
+            resolve(convo);
+         }).catch(reject);
+        });
+
+      },
       before: function(script_name, handler) {
         botkit.middleware.beforeScript.use(function(convo, next) {
           if (convo.script.command == script_name) {
