@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Botkit</title>
+    <style>
+
+    /* shared botkit ui styles */
+    * {
+      box-sizing: border-box; }
+
+    body,
+    html {
+      margin: 0;
+      height: 100%;
+      padding: 0;
+      font-size: 18px;
+      background-color: #FFF;
+      font-family: 'helvetica', sans-serif;
+    }
+
+      a {
+        color: #1432e0;
+      }
+
+      .outside_wrapper {
+          display: flex;
+          flex-direction: row;
+          height: 100%;
+
+      }
+
+      .wrapper {
+          padding: 1rem;
+          max-width: 1000px;
+          margin: 0px auto;
+      }
+
+      nav {
+        /* position: fixed;
+        top: 0;
+        bottom :0;
+        left: 0; */
+        flex-shrink: 0;
+        flex-grow: 0;
+        background-color: #F0F0F0;
+      }
+
+      nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0.5rem;
+      }
+
+      nav ul li a {
+        display: block;
+        text-decoration: none;
+        font-size: 12px;
+      }
+
+      nav ul li .icon {
+        font-size: 2rem;
+        display: block;
+      }
+
+      nav ul li {
+        padding: 0.5rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+      }
+
+      nav ul li:hover {
+        background-color: #C0C0C0;
+        border-radius: 4px;
+      }
+
+      .content_wrapper {
+        /* padding: 1rem; */
+        flex-grow: 1;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <div class="outside_wrapper">
+      {{> menu}}
+      <div class="content_wrapper">
+          {{{body}}}
+      </div>
+    </body>
+  </html>
