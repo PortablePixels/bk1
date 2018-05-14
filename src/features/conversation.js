@@ -58,10 +58,14 @@ module.exports = function(botkit) {
 
 
         this.extractResponse = function(key) {
+          if (!this.state || !this.state.vars) {
+            return '';
+          }
           return this.state.vars['user'] ? this.state.vars['user'][key] : '';
         }
 
         this.extractResponses = function() {
+
           return this.state.vars['user'] ? this.state.vars['user'] : {};
         }
 
