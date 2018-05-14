@@ -58,7 +58,7 @@ module.exports = function(botkit) {
 
 
         this.extractResponse = function(key) {
-          return this.state.vars['user'] ? this.state.vars['user'][key] : null;
+          return this.state.vars['user'] ? this.state.vars['user'][key] : '';
         }
 
         this.extractResponses = function() {
