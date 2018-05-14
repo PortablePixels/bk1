@@ -41,7 +41,7 @@ module.exports = function(config) {
         },
         receive: function(bot, message) {
             debug('Received: ', message);
-            botkit.ingest(bot, message).then(function(response) {
+            botkit.ingest(bot, message).then(function(message, response) {
                 debug('Response: ', response);
                 var convo = botkit.createConversation(message, bot, response.state, response.script);
                 convo.fulfill();

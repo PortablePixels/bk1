@@ -47,7 +47,7 @@ module.exports = function(botkit) {
                       }
 
                       botkit.trigger(message.type, [bot, message]);
-                      resolve(response);
+                      resolve(message, response);
                   });
                 }
             });
