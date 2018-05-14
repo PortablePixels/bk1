@@ -41,11 +41,14 @@ module.exports = function(config) {
         },
         receive: function(bot, message) {
             debug('Received: ', message);
-            botkit.ingest(bot, message).then(function(message, response) {
+            botkit.ingest(bot, message).then(function(message) {
+              botkit.understand(bot, message).then(function(response) {
                 debug('Response: ', response);
                 var convo = botkit.createConversation(message, bot, response.state, response.script);
                 convo.fulfill();
+              });
             });
+
         },
         loadSkills: function(path) {
             var normalizedPath = require("path").join(path);

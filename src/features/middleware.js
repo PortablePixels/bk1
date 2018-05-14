@@ -27,30 +27,36 @@ module.exports = function(botkit) {
     botkit.ingest = function(bot, payload, source) {
         return new Promise(function(resolve, reject) {
             var message = clone(payload);
-            var response = {};
 
             if (!message.type) {
               message.type = 'message';
             }
 
-            botkit.middleware.ingest.run(bot, message, response, function(err, bot, message, response) {
+            botkit.middleware.ingest.run(bot, message, function(err, bot, message) {
+                if (err) {
+                  return reject(err);
+                }
+                resolve(message);
+            });
+      });
+    }
+
+
+    botkit.understand = function(bot, message) {
+      var response = {};
+      return new Promise(function(resolve, reject) {
+          if (!botkit.shouldEvaluate(message.type)) {
+            botkit.trigger(message.type, [bot, message]);
+          } else {
+            botkit.middleware.understand.run(bot, message, response, function(err, bot, message, response) {
                 if (err) {
                   return reject(err);
                 }
 
-                if (!botkit.shouldEvaluate(message.type)) {
-                  botkit.trigger(message.type, [bot, message]);
-                } else {
-                  botkit.middleware.understand.run(bot, message, response, function(err, bot, message, response) {
-                      if (err) {
-                        return reject(err);
-                      }
-
-                      botkit.trigger(message.type, [bot, message]);
-                      resolve(message, response);
-                  });
-                }
+                botkit.trigger(message.type, [bot, message]);
+                resolve(response);
             });
+          }
         });
     }
 
