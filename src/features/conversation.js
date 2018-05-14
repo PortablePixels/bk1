@@ -168,7 +168,9 @@ module.exports = function(botkit) {
                       maxWorkers: 1
                   });
                 });
-            });
+            }).catch(function(err) {
+              console.error('ERROR FULFILLING', err);
+            })
         }
 
         this.setUser(message.user);
