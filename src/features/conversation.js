@@ -86,6 +86,7 @@ module.exports = function(botkit) {
         }
 
         this.kickoff = function(force) {
+            debug('Kickoff script', that.script.command, that.state);
             var that = this;
             return new Promise(function(resolve, reject) {
                 if (force || that.state.turn === 0) {
@@ -198,6 +199,8 @@ module.exports = function(botkit) {
         this.walkScript = function() {
                 var that = this;
                 that.state.turn++;
+
+                debug('Kickoff script', that.script.command, that.state);
 
                 return new Promise(function(resolve, reject) {
 
