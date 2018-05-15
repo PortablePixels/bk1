@@ -21,10 +21,26 @@ module.exports = function(botkit) {
         this.bot = bot;
 
         this.state = state;
+        if (!this.state.vars) {
+          this.state.vars = {};
+        }
 
-        this.script = script;
+        // the source script
+        this.script = {}
+
+        // a named map of threads
+        this.threads = {};
 
         this.replies = [];
+
+
+        this.ingestScript = function(script) {
+          var that = this;
+          that.script = script;
+          for (var x = 0; x < that.script.script.length; x++) {
+            that.threads[that.script.script[x].topic] = that.script.script[x];
+          }
+        }
 
         this.setUser = function(uid) {
             this.context.user = uid;
@@ -33,6 +49,7 @@ module.exports = function(botkit) {
         this.setChannel = function(channel) {
             this.context.channel = channel;
         }
+
 
         this.setVar = function(key, val) {
           if (key!='user') {
@@ -177,8 +194,6 @@ module.exports = function(botkit) {
             })
         }
 
-        this.setUser(message.user);
-        this.setChannel(message.channel);
 
 
         this.walkScript = function() {
@@ -189,11 +204,12 @@ module.exports = function(botkit) {
 
                     that.captureResponse().then(function() {
 
-                        var thread = that.script.script.filter(function(t) {
-                            return (t.topic == that.state.thread);
-                        });
-
-                        thread = thread[0];
+                        var thread = that.threads[that.state.thread];
+                        // var thread = that.script.script.filter(function(t) {
+                        //     return (t.topic == that.state.thread);
+                        // });
+                        //
+                        // thread = thread[0];
 
                         if (that.status=='active' && that.state.cursor < thread.script.length) {
                             var reply = thread.script[that.state.cursor];
@@ -278,7 +294,7 @@ module.exports = function(botkit) {
                       // reset script and state
                       that.state.cursor = 0;
                       that.state.thread = 'default';
-                      that.script = script;
+                      that.ingestScript(script);
 
                       if (options.thead) {
                         that.kickoff(true).then(function() { that.gotoThread(options.thread).then(resolve).catch(reject) }).catch(reject);
@@ -333,6 +349,29 @@ module.exports = function(botkit) {
             });
         }
 
+        // this.createThread = function(thread_name) {
+        //
+        //   var that = this;
+        //   // remove this thread if it exists already
+        //   that.script.script = that.script.script.filter(function(t) {
+        //       return (t.topic != thread_name);
+        //   });
+        //
+        //   that.script.script.push({
+        //     topic: thread_name,
+        //     script: [],
+        //   });
+        //
+        // }
+        //
+        // this.addMessageToThread = function(message, thread_name) {
+        //     var that = this;
+        //     for (var x = 0; x < that.script.script.length; x++) {
+        //       if (that.script.script[x].topic == thread_name) {
+        //         that.script.script[x].script.push(message);
+        //       }
+        //     }
+        // }
 
 
         this.captureResponse = function() {
@@ -340,12 +379,13 @@ module.exports = function(botkit) {
 
             return new Promise(function(resolve, reject) {
 
-                var thread = that.script.script.filter(function(t) {
-                    return (t.topic == that.state.thread);
-                });
+                var thread = that.threads[that.state.thread];
 
-                thread = thread[0];
-
+                // var thread = that.script.script.filter(function(t) {
+                //     return (t.topic == that.state.thread);
+                // });
+                //
+                // thread = thread[0];
 
                 // this was the answer to a question
                 if (that.state.cursor > 0 && thread.script[that.state.cursor - 1].collect) {
@@ -400,6 +440,12 @@ module.exports = function(botkit) {
                 }
             })
         }
+
+
+
+        this.setUser(message.user);
+        this.setChannel(message.channel);
+        this.ingestScript(script);
 
         return this;
 
