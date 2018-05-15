@@ -261,10 +261,13 @@ module.exports = function(botkit) {
                 var that = this;
                 return new Promise(function(resolve, reject) {
                     debug('gotoThread', new_thread);
+                    var current_thread = that.state.thread;
+
+                    that.state.cursor = 0;
+                    that.state.thread = new_thread;
+
                     botkit.middleware.beforeThread.run(that, new_thread, function(err, that, new_thread) {
                         // console.log('Go to thread ', new_thread);
-                        that.state.cursor = 0;
-                        that.state.thread = new_thread;
                         resolve();
                     });
                 });
