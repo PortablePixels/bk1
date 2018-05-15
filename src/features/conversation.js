@@ -205,34 +205,22 @@ module.exports = function(botkit) {
 
                         var thread = that.threads[that.state.thread];
 
-                        console.log('WALKING SCRIPT CURSOR:', that.state.thread, that.state.cursor, thread);
-                        // var thread = that.script.script.filter(function(t) {
-                        //     return (t.topic == that.state.thread);
-                        // });
-                        //
-                        // thread = thread[0];
-
                         if (that.status=='active' && that.state.cursor < thread.length) {
                             var reply = thread[that.state.cursor];
 
-                            console.log('CONSIDER', reply);
                             that.state.cursor++;
                             that.replies.push(reply);
                             // pause for response
                             if (reply.collect) {
-                                console.log('STOP TO COLLECT INPUT');
                                 that.updateSession().then(function() {
                                   resolve(that.replies);
                                 });
                             } else if (reply.action) {
-                                console.log('TAKE AUTOMATIC ACTION');
                                 // take an action baby
-                                // console.log('MESSAGE ACTION', reply.action);
                                 that.takeAction(reply).then(function() {
                                     that.walkScript().then(resolve).catch(reject);
                                 }).catch(reject);
                             } else {
-                                console.log('CONTINUE TO WALK SCRIPT');
                                 that.walkScript().then(resolve).catch(reject);
                             }
                             // }
@@ -267,7 +255,6 @@ module.exports = function(botkit) {
                     that.state.thread = new_thread;
 
                     botkit.middleware.beforeThread.run(that, new_thread, function(err, that, new_thread) {
-                        // console.log('Go to thread ', new_thread);
                         resolve();
                     });
                 });
@@ -278,7 +265,6 @@ module.exports = function(botkit) {
         }
 
         this.stop = function(status) {
-            // console.log('REACH END!', status);
             this.status = status || 'stopped';
         }
 
@@ -318,7 +304,6 @@ module.exports = function(botkit) {
         this.takeAction = function(message) {
             var that = this;
             return new Promise(function(resolve, reject) {
-                // console.log('* TAKE AN ACTION', message.action);
                 switch (message.action) {
                     case 'repeat':
                         that.repeat();
@@ -345,7 +330,6 @@ module.exports = function(botkit) {
                         resolve();
                         break;
                     case 'execute_script':
-                        // console.log('EXECUTE SCRIPT',message);
                         that.executeScript(message.execute).then(resolve).catch(reject);
                         break;
                     default:
@@ -386,23 +370,14 @@ module.exports = function(botkit) {
 
                 var thread = that.threads[that.state.thread];
 
-                // var thread = that.script.script.filter(function(t) {
-                //     return (t.topic == that.state.thread);
-                // });
-                //
-                // thread = thread[0];
-
                 // this was the answer to a question
                 if (that.state.cursor > 0 && thread[that.state.cursor - 1].collect) {
                     var condition = thread[that.state.cursor - 1].collect;
 
-                    // console.log('SET RESPONSE:', thread[response.state.cursor - 1].collect.key, message.text);
-                    //that.state.vars[condition.key] = that.context.incoming_message.text;
                     that.setUserVar(condition.key, that.context.incoming_message.text);
 
                     botkit.middleware.onChange.run(that, condition.key, that.context.incoming_message.text, function(err, that, key, val) {
                         if (condition.options) {
-                            // console.log('options', condition.options);
                             var default_action = condition.options.filter(function(c) {
                                 return c.default == true;
                             });
@@ -413,7 +388,6 @@ module.exports = function(botkit) {
                             // test all the patterns
                             var triggered = 0;
                             async.each(possible_actions, function(pattern, next) {
-                                // console.log('POSSIBLE ACTION', pattern.action);
                                 var test = new RegExp(pattern.pattern, 'i');
                                 if (triggered == 0 && that.context.incoming_message.text.match(test)) {
                                     console.log('💡 > ', that.context.incoming_message.text, '==', pattern.pattern,pattern.action);
@@ -426,9 +400,7 @@ module.exports = function(botkit) {
                                 }
                             }, function() {
                                 if (triggered == 0 && default_action.length) {
-                                    // console.log('💡 > TOOK DEFAULT ACTION');
                                     that.takeAction(default_action[0]).then(function() {
-                                        // console.log('took default action....')
                                         resolve();
                                     });
                                 } else {
