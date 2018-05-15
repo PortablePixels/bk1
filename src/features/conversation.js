@@ -38,7 +38,7 @@ module.exports = function(botkit) {
           var that = this;
           that.script = script;
           for (var x = 0; x < that.script.script.length; x++) {
-            that.threads[that.script.script[x].topic] = that.script.script[x];
+            that.threads[that.script.script[x].topic] = that.script.script[x].script;
           }
         }
 
@@ -211,8 +211,8 @@ module.exports = function(botkit) {
                         //
                         // thread = thread[0];
 
-                        if (that.status=='active' && that.state.cursor < thread.script.length) {
-                            var reply = thread.script[that.state.cursor];
+                        if (that.status=='active' && that.state.cursor < thread.length) {
+                            var reply = thread[that.state.cursor];
 
                             // console.log('logging next reply', reply);
                             that.state.cursor++;
@@ -388,10 +388,10 @@ module.exports = function(botkit) {
                 // thread = thread[0];
 
                 // this was the answer to a question
-                if (that.state.cursor > 0 && thread.script[that.state.cursor - 1].collect) {
-                    var condition = thread.script[that.state.cursor - 1].collect;
+                if (that.state.cursor > 0 && thread[that.state.cursor - 1].collect) {
+                    var condition = thread[that.state.cursor - 1].collect;
 
-                    // console.log('SET RESPONSE:', thread.script[response.state.cursor - 1].collect.key, message.text);
+                    // console.log('SET RESPONSE:', thread[response.state.cursor - 1].collect.key, message.text);
                     //that.state.vars[condition.key] = that.context.incoming_message.text;
                     that.setUserVar(condition.key, that.context.incoming_message.text);
 
