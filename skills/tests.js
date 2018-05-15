@@ -16,6 +16,10 @@ module.exports = function(botkit) {
   botkit.studio.before('hello', function(convo, next) {
 
     console.log('BEFORE HELLO SCRIPT');
+
+    // console.log('THROWING AN ERROR');
+    // user.monkey = 1;
+
     next();
 
   });
@@ -23,13 +27,21 @@ module.exports = function(botkit) {
   botkit.studio.after('hello', function(convo, next) {
 
     console.log('AFTER HELLO SCRIPT');
+
+    // console.log('THROWING AN ERROR');
+    // user.monkey = 1;
+
+
     next();
 
   });
 
   botkit.studio.beforeThread('hello', 'taco', function(convo, next) {
-
     console.log('THIS IS THE TACO THREAD');
+
+    // console.log('THROWING AN ERROR');
+    // user.monkey = 1;
+
     next();
 
   });
@@ -37,6 +49,10 @@ module.exports = function(botkit) {
   botkit.studio.validate('hello', 'loves_tacos', function(convo, next) {
 
     console.log('VALIDATING THE TACO LOVING STATUS');
+
+    // console.log('THROWING AN ERROR');
+    // user.monkey = 1;
+
     next();
 
   });

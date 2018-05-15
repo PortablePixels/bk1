@@ -190,6 +190,8 @@ module.exports = function(botkit) {
                   }, {
                       maxWorkers: 1
                   });
+                }).catch(function(err) {
+                  console.error('ERROR FULFILLING', err);
                 });
             }).catch(function(err) {
               console.error('ERROR FULFILLING', err);
@@ -231,19 +233,25 @@ module.exports = function(botkit) {
                             // }
                         } else {
                             botkit.middleware.afterScript.run(that, function(err, that) {
+                              if (err) {
+                                reject(err);
+                              } else {
                                 botkit.db.sessions.remove({
                                     user: that.context.user,
                                     channel: that.context.channel
                                 }, function(err) {
                                     if (err) {
                                         console.error('Could not remove session', err);
+                                        reject(err);
+                                    }  else {
+                                      resolve(that.replies);
                                     }
-                                    resolve(that.replies);
                                 });
+                              }
                             });
                         }
 
-                    });
+                    }).catch(reject);
 
                 })
             },
@@ -260,7 +268,11 @@ module.exports = function(botkit) {
                     that.state.thread = new_thread;
 
                     botkit.middleware.beforeThread.run(that, new_thread, function(err, that, new_thread) {
+                      if (err) {
+                        reject(err);
+                      } else {
                         resolve();
+                      }
                     });
                 });
             }
@@ -382,39 +394,43 @@ module.exports = function(botkit) {
                     that.setUserVar(condition.key, that.context.incoming_message.text);
 
                     botkit.middleware.onChange.run(that, condition.key, that.context.incoming_message.text, function(err, that, key, val) {
-                        if (condition.options) {
-                            var default_action = condition.options.filter(function(c) {
-                                return c.default == true;
-                            });
-                            var possible_actions = condition.options.filter(function(c) {
-                                return c.default != true;
-                            });
-
-                            // test all the patterns
-                            var triggered = 0;
-                            async.each(possible_actions, function(pattern, next) {
-                                var test = new RegExp(pattern.pattern, 'i');
-                                if (triggered == 0 && that.context.incoming_message.text.match(test)) {
-                                    console.log('💡 > ', that.context.incoming_message.text, '==', pattern.pattern,pattern.action);
-                                    triggered++;
-                                    that.takeAction(pattern).then(function() {
-                                        next();
-                                    });
-                                } else {
-                                    next();
-                                }
-                            }, function() {
-                                if (triggered == 0 && default_action.length) {
-                                    that.takeAction(default_action[0]).then(function() {
-                                        resolve();
-                                    });
-                                } else {
-                                    resolve();
-                                }
-                            });
-
+                        if (err) {
+                          console.log('ERROR IN ON CHANGE CAPTURED AND REJECTING CAPTURERESPONSE');
+                          reject(err);
                         } else {
-                            resolve();
+                          if (condition.options) {
+                              var default_action = condition.options.filter(function(c) {
+                                  return c.default == true;
+                              });
+                              var possible_actions = condition.options.filter(function(c) {
+                                  return c.default != true;
+                              });
+
+                              // test all the patterns
+                              var triggered = 0;
+                              async.each(possible_actions, function(pattern, next) {
+                                  var test = new RegExp(pattern.pattern, 'i');
+                                  if (triggered == 0 && that.context.incoming_message.text.match(test)) {
+                                      console.log('💡 > ', that.context.incoming_message.text, '==', pattern.pattern,pattern.action);
+                                      triggered++;
+                                      that.takeAction(pattern).then(function() {
+                                          next();
+                                      });
+                                  } else {
+                                      next();
+                                  }
+                              }, function() {
+                                  if (triggered == 0 && default_action.length) {
+                                      that.takeAction(default_action[0]).then(function() {
+                                          resolve();
+                                      });
+                                  } else {
+                                      resolve();
+                                  }
+                              });
+                          } else {
+                              resolve();
+                          }
                         }
                     });
                 } else {

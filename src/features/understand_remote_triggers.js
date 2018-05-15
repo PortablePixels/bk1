@@ -92,9 +92,13 @@ module.exports = function(botkit) {
       before: function(script_name, handler) {
         botkit.middleware.beforeScript.use(function(convo, next) {
           if (convo.script.command == script_name) {
-            handler(convo, function() {
-              next();
-            });
+            try {
+              handler(convo, function() {
+                next();
+              });
+            } catch(err) {
+              next(err);
+            }
           } else {
             next();
           }
@@ -103,9 +107,13 @@ module.exports = function(botkit) {
       after: function(script_name, handler) {
         botkit.middleware.afterScript.use(function(convo, next) {
           if (convo.script.command == script_name) {
-            handler(convo, function() {
-              next();
-            });
+            try {
+              handler(convo, function() {
+                next();
+              });
+            } catch(err) {
+              next(err);
+            }
           } else {
             next();
           }
@@ -114,9 +122,13 @@ module.exports = function(botkit) {
       validate: function(script_name, var_name, handler) {
         botkit.middleware.onChange.use(function(convo, key, val, next) {
           if (convo.script.command == script_name && key == var_name) {
-            handler(convo, function() {
-              next();
-            });
+            try {
+              handler(convo, function() {
+                next();
+              });
+            } catch(err) {
+              next(err);
+            }
           } else {
             next();
           }
@@ -125,9 +137,13 @@ module.exports = function(botkit) {
       beforeThread: function(script_name, thread_name, handler) {
         botkit.middleware.beforeThread.use(function(convo, new_thread, next) {
           if (convo.script.command == script_name && thread_name == new_thread) {
-            handler(convo, function() {
-              next();
-            });
+            try {
+              handler(convo, function() {
+                next();
+              });
+            } catch(err) {
+              next(err);
+            }
           } else {
             next();
           }

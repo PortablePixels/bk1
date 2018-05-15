@@ -4,10 +4,9 @@
 
 Get BK1 working with SmokeFree
 
-* Ability to get a script, use it as a tips library
-* Alternate to "live" parse user
-* session data from socket persist properly
-
+x Ability to get a script, use it as a tips library
+x Alternate to "live" parse user
+x session data from socket persist properly
 
 5/14
 
