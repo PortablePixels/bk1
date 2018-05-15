@@ -53,9 +53,7 @@ module.exports = function(botkit) {
 
 
         this.setVar = function(key, val) {
-          if (key!='user') {
-            this.state.vars[key] = val;
-          }
+          this.state.vars[key] = val;
         }
 
         this.getVar = function(key) {
