@@ -213,21 +213,24 @@ module.exports = function(botkit) {
                         if (that.status=='active' && that.state.cursor < thread.length) {
                             var reply = thread[that.state.cursor];
 
-                            // console.log('logging next reply', reply);
+                            console.log('CONSIDER', reply);
                             that.state.cursor++;
                             that.replies.push(reply);
                             // pause for response
                             if (reply.collect) {
-                                that.updateSession(that.context, that.state).then(function() {
+                                console.log('STOP TO COLLECT INPUT');
+                                that.updateSession().then(function() {
                                   resolve(that.replies);
                                 });
                             } else if (reply.action) {
+                                console.log('TAKE AUTOMATIC ACTION');
                                 // take an action baby
                                 // console.log('MESSAGE ACTION', reply.action);
                                 that.takeAction(reply).then(function() {
                                     that.walkScript().then(resolve).catch(reject);
                                 }).catch(reject);
                             } else {
+                                console.log('CONTINUE TO WALK SCRIPT');
                                 that.walkScript().then(resolve).catch(reject);
                             }
                             // }
@@ -341,9 +344,7 @@ module.exports = function(botkit) {
                         that.executeScript(message.execute).then(resolve).catch(reject);
                         break;
                     default:
-                        that.gotoThread(message.action).then(function() {
-                            resolve();
-                        });
+                        that.gotoThread(message.action).then(resolve).catch(reject);
                 }
             });
         }
