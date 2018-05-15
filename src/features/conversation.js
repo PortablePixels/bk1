@@ -23,6 +23,7 @@ module.exports = function(botkit) {
         this.state = state;
         if (!this.state.vars) {
           this.state.vars = {};
+          this.state.user_vars = {};
         }
 
         // the source script
@@ -67,10 +68,10 @@ module.exports = function(botkit) {
 
 
         this.setUserVar = function(key, val) {
-          if (!this.state.vars['user']) {
-            this.state.vars['user'] = {};
+          if (!this.state.user_vars) {
+            this.state.user_vars = {};
           }
-          this.state.vars['user'][key] = val;
+          this.state.user_vars[key] = val;
         }
 
 
@@ -78,12 +79,12 @@ module.exports = function(botkit) {
           if (!this.state || !this.state.vars) {
             return '';
           }
-          return this.state.vars['user'] ? (this.state.vars['user'][key] ? this.state.vars['user'][key] : '') : '';
+          return this.state.user_vars ? (this.state.user_vars[key] ? this.state.user_vars[key] : '') : '';
         }
 
         this.extractResponses = function() {
 
-          return this.state.vars['user'] ? this.state.vars['user'] : {};
+          return this.state.user_vars ? this.user_vars : {};
         }
 
         this.kickoff = function(force) {
@@ -130,7 +131,7 @@ module.exports = function(botkit) {
 
           var vars = {
             vars: this.state.vars,
-            user: this.state.vars.user,
+            user: this.state.user_vars,
           }
 
           if (typeof(obj)=='string') {
