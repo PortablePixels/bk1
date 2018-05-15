@@ -204,6 +204,8 @@ module.exports = function(botkit) {
                     that.captureResponse().then(function() {
 
                         var thread = that.threads[that.state.thread];
+
+                        console.log('WALKING SCRIPT CURSOR:', that.state.cursor, thread);
                         // var thread = that.script.script.filter(function(t) {
                         //     return (t.topic == that.state.thread);
                         // });
