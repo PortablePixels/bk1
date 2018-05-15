@@ -86,8 +86,10 @@ module.exports = function(botkit) {
         }
 
         this.kickoff = function(force) {
-            debug('Kickoff script', that.script.command, that.state);
             var that = this;
+
+            debug('Kickoff script', that.state);
+
             return new Promise(function(resolve, reject) {
                 if (force || that.state.turn === 0) {
                     botkit.middleware.beforeScript.run(that, function(err, that) {
@@ -200,7 +202,7 @@ module.exports = function(botkit) {
                 var that = this;
                 that.state.turn++;
 
-                debug('Kickoff script', that.script.command, that.state);
+                debug('Walk script', that.state);
 
                 return new Promise(function(resolve, reject) {
 
