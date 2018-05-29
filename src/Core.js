@@ -115,11 +115,11 @@ module.exports = function(config) {
       // add ability to "hear" simple triggers in message events
       // require(__dirname + '/features/understand_remote_triggers.js')(botkit);
 
-      try {
-          botkit.use(require(__dirname + '/plugins/plugin_manager/plugin.js'));
-      } catch(err) {
-          console.log('Caught error in plugin loader', err);
-      }
+      // try {
+      //     botkit.use(require(__dirname + '/plugins/plugin_manager/plugin.js'));
+      // } catch(err) {
+      //     console.log('Caught error in plugin loader', err);
+      // }
 
     } else {
 

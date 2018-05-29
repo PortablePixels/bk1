@@ -237,7 +237,14 @@ module.exports = function(botkit) {
                       var reply = that.processTemplate(template);
                       reply.to = that.context.user;
 
-                      q.add(that.context.user, reply);
+                      if (
+                          (reply.action && Object.keys(reply).length == 1) ||
+                          (reply.action && reply.execute && Object.keys(reply).length == 2)
+                        ) {
+                        // skip this because it is an action directive with no text or attachments
+                      } else {
+                        q.add(that.context.user, reply);
+                      }
 
                   }
 
