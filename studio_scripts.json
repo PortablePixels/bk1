@@ -1,0 +1,2097 @@
+[
+    {
+        "command": "menu",
+        "description": "This menu is presented to users to navigate your bot",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "text": [
+                            "What can I do for you?"
+                        ],
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "how do bots work?",
+                                "title": "How do bots work?"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "help menu",
+                                "title": "Edit my menu"
+                            },
+                            {
+                                "title": "Teach Me",
+                                "payload": "teach me",
+                                "content_type": "text"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "help",
+                                "title": "Help"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "type": "string",
+                "pattern": "menu"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin"
+        ]
+    },
+    {
+        "command": "vr",
+        "description": "vr",
+        "script": [
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "more",
+                                "title": "Tell me more"
+                            }
+                        ],
+                        "text": [
+                            "Yes! Bots will work in VR."
+                        ]
+                    },
+                    {
+                        "text": [
+                            "There's more reason than to interact conversationally with software in VR"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "Have you ever tried TYPING on a virtual keyboard while wearing goggles? It is no fun!"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [
+            {
+                "id": 305,
+                "type": "regexp",
+                "pattern": "vr"
+            }
+        ],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "learning_mode_intro",
+        "description": "An introduction to learning mode",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "menu",
+                                "title": "Menu"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "more help",
+                                "title": "More Help"
+                            }
+                        ],
+                        "collect": null,
+                        "text": [
+                            "With learning mode enabled, you can train me with replies to specific phrases just by talking to me.\n\nTo start, send me a message that I should have a good response for. If I don't already have one, we can create one together that you can edit later."
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "can you learn",
+                "type": "regexp"
+            },
+            {
+                "pattern": "what do you do",
+                "type": "regexp"
+            },
+            {
+                "pattern": "what can you do",
+                "type": "regexp"
+            },
+            {
+                "pattern": "teach me",
+                "type": "string"
+            },
+            {
+                "pattern": "learning mode",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "learning_mode",
+            "builtin"
+        ]
+    },
+    {
+        "command": "create_a_reply",
+        "description": "When enabled in your project and set as fallback, allows you to add scripts by talking to your bot",
+        "script": [
+            {
+                "script": [
+                    {
+                        "meta": [],
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "no",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "create_script",
+                                    "type": "utterance",
+                                    "pattern": "yes"
+                                },
+                                {
+                                    "action": "no",
+                                    "type": "utterance",
+                                    "pattern": "no"
+                                }
+                            ],
+                            "key": "question_1",
+                            "multiple": false
+                        },
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "yes",
+                                "title": "Yes"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "no",
+                                "title": "No"
+                            }
+                        ],
+                        "text": [
+                            "I do not know how to respond to that message. Would you like to create a reply now?"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            },
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "pattern": "quit",
+                                    "type": "utterance",
+                                    "action": "no"
+                                }
+                            ],
+                            "key": "response_text"
+                        },
+                        "text": [
+                            "What should I say when someone says \"{{origin.text}}\""
+                        ]
+                    },
+                    {
+                        "action": "confirmation"
+                    }
+                ],
+                "topic": "create_script"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "OK. Send me another message to keep training."
+                        ],
+                        "quick_replies": [
+                            {
+                                "title": "Menu",
+                                "payload": "menu",
+                                "content_type": "text"
+                            },
+                            {
+                                "title": "Help",
+                                "payload": "help",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "no"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "OK! When a human says:\n> {{origin.text}}\n\nI will reply with:\n> {{responses.response_text}}\n\n[Continue editing in Botkit Studio](https://studio.botkit.ai/app/bots/{{vars.bot.botkit_studio_id}}/commands/{{vars.new_script._id}})"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "confirmation"
+            },
+            {
+                "topic": "error",
+                "script": [
+                    {
+                        "text": [
+                            "I encountered an error with the Botkit Studio API while creating this script. \n\nThe error was: {{vars.error}}"
+                        ]
+                    },
+                    {
+                        "action": "stop"
+                    }
+                ]
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "I don't know how to respond to that, and my learning mode is not enabled.\n\nEither enable learning mode, by adding `LEARNING_MODE=true` to my `.env file`, or [change my fallback script setting in Botkit Studio](https://studio.botkit.ai/app/bots/{{vars.bot.botkit_studio_id}}/edit)"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "error_not_enabled"
+            }
+        ],
+        "triggers": [],
+        "variables": [
+            {
+                "type": "string",
+                "name": "response_text"
+            },
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": [
+            "learning_mode",
+            "builtin"
+        ]
+    },
+    {
+        "command": "help",
+        "description": "Built-in content to help you get started",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "getting started",
+                                "title": "Getting Started"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "help theming",
+                                "title": "Theming this Chat"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "help contact",
+                                "title": "Contact Botkit"
+                            }
+                        ],
+                        "text": [
+                            "I can help with these things:"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            },
+            {
+                "topic": "menu",
+                "script": [
+                    {
+                        "platforms": {
+                            "web": {
+                                "files": [
+                                    {
+                                        "url": "https://raw.githubusercontent.com/howdyai/botkit-starter-web/master/docs/edit_menu.gif"
+                                    }
+                                ]
+                            }
+                        },
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "ok...",
+                                "title": "Continue..."
+                            }
+                        ],
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "My menu is a special script that uses “quick replies” to suggest useful options to people when they first begin their chat session with me. \n\nQuick replies can also be used to build menus and connect conversations from messages in other scripts. Just make sure the \"payload\" of the quick reply matches a trigger."
+                        ]
+                    },
+                    {
+                        "text": [
+                            "Use Botkit Studio's dialog editor to customize the message and options presented in my menu.\n\n[Launch Botkit Studio Script Editor](https://studio.botkit.ai/app/bots/{{vars.bot.botkit_studio_id}}/scripts)"
+                        ]
+                    },
+                    {
+                        "execute": {
+                            "thread": "default",
+                            "script": "menu"
+                        },
+                        "action": "execute_script"
+                    }
+                ]
+            },
+            {
+                "topic": "tutorial",
+                "script": [
+                    {
+                        "action": "execute_script",
+                        "execute": {
+                            "script": "tutorial",
+                            "thread": "default"
+                        }
+                    }
+                ]
+            },
+            {
+                "topic": "contact",
+                "script": [
+                    {
+                        "text": [
+                            "The Botkit team loves to hear from other humans who are interested in bots! There are lots of resources available, and a few ways to get in touch.\n\n[Botkit Studio Knowledge Base](https://botkit.groovehq.com/help_center)\n\n[Community Slack](https://community.botkit.ai)\n\n[Github Issues](https://github.com/howdyai/botkit/issues)"
+                        ],
+                        "quick_replies": [
+                            {
+                                "title": "More help",
+                                "payload": "help",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "theming",
+                "script": [
+                    {
+                        "text": [
+                            "The look and feel of this chat window is highly customizable. Using basic HTML and CSS, you can do everything from changing the colors to completely changing the way it looks and acts.\n\n[Here is a guide to customizing and extending the chat window](https://github.com/howdyai/botkit-starter-web/blob/master/docs/botkit_web_client.md)"
+                        ],
+                        "quick_replies": [
+                            {
+                                "title": "More help",
+                                "payload": "help",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "learning mode",
+                "script": [
+                    {
+                        "action": "execute_script",
+                        "execute": {
+                            "script": "learning_mode_intro",
+                            "thread": "default"
+                        }
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "type": "string",
+                "pattern": "more help"
+            },
+            {
+                "type": "string",
+                "pattern": "help"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin"
+        ]
+    },
+    {
+        "command": "hello",
+        "description": "Respond to greetings",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "text": [
+                            "Hello human! It is me, {{vars.bot.name}}, a friendly bot."
+                        ]
+                    },
+                    {
+                        "text": [
+                            "i hope you are well"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "that would be good"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "DO YOU LOVE TACOS?"
+                        ],
+                        "collect": {
+                            "key": "how_are_you",
+                            "options": [
+                                {
+                                    "default": true,
+                                    "pattern": "default",
+                                    "action": "repeat"
+                                },
+                                {
+                                    "pattern": "yes",
+                                    "type": "string",
+                                    "action": "yes"
+                                },
+                                {
+                                    "pattern": "no",
+                                    "type": "string",
+                                    "action": "no"
+                                }
+                            ]
+                        },
+                        "quick_replies": [
+                            {
+                                "title": "Yes",
+                                "payload": "yes",
+                                "content_type": "text"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "no",
+                                "title": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "action": "taco"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            },
+            {
+                "topic": "taco",
+                "script": [
+                    {
+                        "text": [
+                            "This is taco is the taco thread. Hail the taco."
+                        ]
+                    },
+                    {
+                        "text": [
+                            "AMIRITE?"
+                        ],
+                        "collect": {
+                            "key": "loves_tacos",
+                            "options": [
+                                {
+                                    "default": true,
+                                    "pattern": "default",
+                                    "action": "next"
+                                },
+                                {
+                                    "pattern": "no",
+                                    "type": "string",
+                                    "action": "crazy"
+                                },
+                                {
+                                    "pattern": "poot",
+                                    "type": "string",
+                                    "action": "poot"
+                                }
+                            ]
+                        },
+                        "quick_replies": [
+                            {
+                                "title": "Yes",
+                                "payload": "yes",
+                                "content_type": "text"
+                            },
+                            {
+                                "title": "No",
+                                "payload": "no",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "text": [
+                            "Yeah!!!!!!!!!!!!"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "yes",
+                "script": [
+                    {
+                        "text": [
+                            "good, good, that is a positive thing to say."
+                        ]
+                    },
+                    {
+                        "action": "taco"
+                    }
+                ]
+            },
+            {
+                "topic": "no",
+                "script": [
+                    {
+                        "text": [
+                            "why so negative? let's try this again."
+                        ]
+                    },
+                    {
+                        "action": "default"
+                    }
+                ]
+            },
+            {
+                "topic": "crazy",
+                "script": [
+                    {
+                        "text": [
+                            "ARE YOU FUCKING CRAZYAYA?!@?~!?!!?!?!@#?!@#"
+                        ]
+                    },
+                    {
+                        "action": "stop"
+                    }
+                ]
+            },
+            {
+                "topic": "poot",
+                "script": [
+                    {
+                        "text": [
+                            "This is poot!"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "cool"
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "hey",
+                "type": "string"
+            },
+            {
+                "pattern": "howdy",
+                "type": "string"
+            },
+            {
+                "pattern": "hi",
+                "type": "string"
+            },
+            {
+                "type": "string",
+                "pattern": "hello"
+            }
+        ],
+        "variables": [
+            {
+                "id": 62,
+                "type": "string",
+                "name": "loves_tacos"
+            },
+            {
+                "id": 179,
+                "type": "string",
+                "name": "how_are_you"
+            },
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin",
+            "smalltalk"
+        ]
+    },
+    {
+        "command": "goodbye",
+        "description": "Respond to goodbyes",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "text": [
+                            "Goodbye!"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "good bye",
+                "type": "string"
+            },
+            {
+                "pattern": "later",
+                "type": "string"
+            },
+            {
+                "pattern": "bye",
+                "type": "string"
+            },
+            {
+                "type": "string",
+                "pattern": "goodbye"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin",
+            "smalltalk"
+        ]
+    },
+    {
+        "command": "thanks",
+        "description": "Respond to thanks",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "text": [
+                            "You are welcome"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "thx",
+                "type": "string"
+            },
+            {
+                "pattern": "thankyou",
+                "type": "string"
+            },
+            {
+                "pattern": "thank you",
+                "type": "string"
+            },
+            {
+                "type": "string",
+                "pattern": "thanks"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin",
+            "smalltalk"
+        ]
+    },
+    {
+        "command": "fallback",
+        "description": "What the bot says when no other triggers match",
+        "script": [
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Sorry, I don't know how to respond to that."
+                        ]
+                    },
+                    {
+                        "execute": {
+                            "thread": "default",
+                            "script": "menu"
+                        },
+                        "action": "execute_script"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": [
+            "builtin"
+        ]
+    },
+    {
+        "command": "tutorial",
+        "description": "Built-in tutorial to help you get started",
+        "script": [
+            {
+                "topic": "default",
+                "script": [
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "tell me about writing dialog",
+                                "title": "Tell me about writing dialog"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "menu",
+                                "title": "Menu"
+                            }
+                        ],
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "quit",
+                                    "type": "utterance",
+                                    "pattern": "quit"
+                                },
+                                {
+                                    "execute": {
+                                        "thread": "default",
+                                        "script": "menu"
+                                    },
+                                    "action": "execute_script",
+                                    "type": "string",
+                                    "pattern": "menu"
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "Bots can be useful for performing all sorts of tasks, but they do their jobs in 2 basic ways:\n\nThey can **communicate information conversationally**, and they can **perform code-driven tasks** on behalf of humans.\n\nIn Botkit bots like me, scripted dialog can be managed in [Botkit Studio](https://studio.botkit.ai), while functionality is built with \"skill\" modules plugged into the framework itself."
+                        ]
+                    },
+                    {
+                        "action": "dialog"
+                    }
+                ]
+            },
+            {
+                "topic": "on_timeout",
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ]
+            },
+            {
+                "topic": "whats next",
+                "script": [
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "learning mode?",
+                                "title": "Learning Mode?"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "more help",
+                                "title": "More help"
+                            }
+                        ],
+                        "text": [
+                            "What do you want to do next?"
+                        ],
+                        "collect": null
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ]
+            },
+            {
+                "topic": "dialog",
+                "script": [
+                    {
+                        "text": [
+                            "The responses I send are based on dialog scripts that are triggered when I receive a message that matches a keyword or pattern. These scripts and triggers are managed in Botkit Studio.\n\n[Open my script editor](https://studio.botkit.ai/app/bots/{{vars.bot.botkit_studio_id}}/scripts)"
+                        ],
+                        "collect": {
+                            "key": "question_1",
+                            "options": [
+                                {
+                                    "default": true,
+                                    "pattern": "default",
+                                    "action": "next"
+                                },
+                                {
+                                    "action": "quit",
+                                    "type": "utterance",
+                                    "pattern": "quit"
+                                }
+                            ]
+                        },
+                        "quick_replies": [
+                            {
+                                "title": "Continue",
+                                "payload": "continue",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "tell me about writing code",
+                                "title": "Tell me about writing code"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "menu",
+                                "title": "Menu"
+                            }
+                        ],
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "quit",
+                                    "type": "utterance",
+                                    "pattern": "quit"
+                                },
+                                {
+                                    "execute": {
+                                        "thread": "default",
+                                        "script": "menu"
+                                    },
+                                    "action": "execute_script",
+                                    "type": "string",
+                                    "pattern": "menu"
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "I also come with a built-in **learning mode** that can be used to create scripts by chatting with me here. To use learning mode, just send me messages! I will let you know if I do not have an appropriate response."
+                        ]
+                    },
+                    {
+                        "action": "code"
+                    }
+                ]
+            },
+            {
+                "topic": "code",
+                "script": [
+                    {
+                        "text": [
+                            "New code-driven abilities are added to your bot in the form of skill modules. These can do things like send information to an external API, read information from a database, or send an email to another human.\n\nFrom inside a module, developers can access all of Botkit's core functionality, as well as any other API or Node library.\n\n[Here is a guide to creating skill modules](https://github.com/howdyai/botkit-starter-web/blob/master/docs/how_to_build_skills.md)\n\n[Here is the Botkit developer guide](https://github.com/howdyai/botkit/blob/master/docs/readme.md#developing-with-botkit)"
+                        ],
+                        "collect": {
+                            "key": "question_1",
+                            "options": [
+                                {
+                                    "default": true,
+                                    "pattern": "default",
+                                    "action": "next"
+                                },
+                                {
+                                    "action": "quit",
+                                    "type": "utterance",
+                                    "pattern": "quit"
+                                }
+                            ]
+                        },
+                        "quick_replies": [
+                            {
+                                "title": "Continue",
+                                "payload": "continue",
+                                "content_type": "text"
+                            }
+                        ]
+                    },
+                    {
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "continue",
+                                "title": "Continue"
+                            }
+                        ],
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "quit",
+                                    "type": "utterance",
+                                    "pattern": "quit"
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "You can automatically generate skill modules to extend Botkit Studio dialog scripts. Look for the \"Code\" button in the script editor toolbar.\n\n[Here are some docs about building skill modules for Botkit Studio](https://github.com/howdyai/botkit/blob/master/docs/readme-studio.md#function-index)"
+                        ]
+                    },
+                    {
+                        "action": "whats next"
+                    }
+                ]
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "This is quit"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "quit"
+            }
+        ],
+        "triggers": [
+            {
+                "type": "regexp",
+                "pattern": "how do you work"
+            },
+            {
+                "type": "string",
+                "pattern": "get started"
+            },
+            {
+                "type": "string",
+                "pattern": "getting started"
+            },
+            {
+                "pattern": "how do bots work",
+                "type": "regexp"
+            },
+            {
+                "type": "string",
+                "pattern": "tutorial"
+            }
+        ],
+        "variables": [
+            {
+                "name": "question_1",
+                "type": "string"
+            },
+            {
+                "name": "question_2",
+                "type": "string"
+            },
+            {
+                "name": "question_3",
+                "type": "string"
+            }
+        ],
+        "tags": [
+            "builtin"
+        ]
+    },
+    {
+        "command": "test",
+        "description": "test",
+        "script": [
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "This is the main thread of test"
+                        ]
+                    },
+                    {
+                        "action": "second_thread"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            },
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_2"
+                        },
+                        "text": [
+                            "This is second_thread"
+                        ]
+                    },
+                    {
+                        "action": "final_thread"
+                    }
+                ],
+                "topic": "second_thread"
+            },
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_3"
+                        },
+                        "text": [
+                            "This is final_thread"
+                        ]
+                    },
+                    {
+                        "execute": {
+                            "thread": "default",
+                            "script": "test2"
+                        },
+                        "action": "execute_script"
+                    }
+                ],
+                "topic": "final_thread"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "OH BOY!"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "alt_path"
+            }
+        ],
+        "triggers": [
+            {
+                "id": 76,
+                "type": "string",
+                "pattern": "runtest"
+            },
+            {
+                "pattern": "test",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "test2",
+        "description": "more tests",
+        "script": [
+            {
+                "script": [
+                    {
+                        "text": [
+                            "This is the test2 script. Customize me!\n\n{{vars.user.question_1}}\n\nand\n\n{{vars.user.question_2}}\n\nand \n\n{{vars.test1}}\n\nand \n\n{{vars.test2}}"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "Should we repeat?"
+                        ],
+                        "collect": {
+                            "key": "repeat",
+                            "options": [
+                                {
+                                    "default": true,
+                                    "pattern": "default",
+                                    "action": "repeat"
+                                },
+                                {
+                                    "pattern": "yes",
+                                    "type": "string",
+                                    "action": "execute_script",
+                                    "execute": {
+                                        "script": "test",
+                                        "thread": "default"
+                                    }
+                                },
+                                {
+                                    "pattern": "no",
+                                    "type": "string",
+                                    "action": "complete"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "action": "complete",
+                        "selected_scripts_threads": [
+                            {
+                                "script": [
+                                    {
+                                        "collect": {
+                                            "options": [
+                                                {
+                                                    "action": "next",
+                                                    "pattern": "default",
+                                                    "default": true
+                                                }
+                                            ],
+                                            "key": "question_1"
+                                        },
+                                        "text": [
+                                            "This is the main thread of test"
+                                        ]
+                                    },
+                                    {
+                                        "action": "second_thread"
+                                    }
+                                ],
+                                "topic": "default"
+                            },
+                            {
+                                "script": [
+                                    {
+                                        "text": [
+                                            "Looks like you got distracted. We can continue later."
+                                        ]
+                                    },
+                                    {
+                                        "action": "timeout"
+                                    }
+                                ],
+                                "topic": "on_timeout"
+                            },
+                            {
+                                "script": [
+                                    {
+                                        "collect": {
+                                            "options": [
+                                                {
+                                                    "action": "next",
+                                                    "pattern": "default",
+                                                    "default": true
+                                                }
+                                            ],
+                                            "key": "question_2"
+                                        },
+                                        "text": [
+                                            "This is second_thread"
+                                        ]
+                                    },
+                                    {
+                                        "action": "final_thread"
+                                    }
+                                ],
+                                "topic": "second_thread"
+                            },
+                            {
+                                "script": [
+                                    {
+                                        "collect": {
+                                            "options": [
+                                                {
+                                                    "action": "next",
+                                                    "pattern": "default",
+                                                    "default": true
+                                                }
+                                            ],
+                                            "key": "question_3"
+                                        },
+                                        "text": [
+                                            "This is final_thread"
+                                        ]
+                                    },
+                                    {
+                                        "execute": {
+                                            "thread": "default",
+                                            "script": "test2"
+                                        },
+                                        "action": "execute_script"
+                                    }
+                                ],
+                                "topic": "final_thread"
+                            },
+                            {
+                                "script": [
+                                    {
+                                        "text": [
+                                            "OH BOY!"
+                                        ]
+                                    },
+                                    {
+                                        "action": "complete"
+                                    }
+                                ],
+                                "topic": "alt_path"
+                            }
+                        ]
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "test2",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "name": "repeat",
+                "type": "string",
+                "id": 393
+            },
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "long script",
+        "description": "this has a lot of messages",
+        "script": [
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Hey"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "whats up"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "how are you"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "this is a test"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "is it good"
+                        ]
+                    },
+                    {
+                        "text": [
+                            "i dunno"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "long script",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "huh",
+        "description": "wha?",
+        "script": [
+            {
+                "script": [
+                    {
+                        "text": [
+                            "huh?",
+                            "wha?",
+                            "eh?",
+                            "say again?",
+                            "??"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "huh",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "butts",
+        "description": "do you like butts",
+        "script": [
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "huh",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "yes_thread",
+                                    "type": "string",
+                                    "pattern": "yes"
+                                },
+                                {
+                                    "action": "no_thread",
+                                    "type": "string",
+                                    "pattern": "no"
+                                }
+                            ],
+                            "key": "likes_butts"
+                        },
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "yes",
+                                "title": "Yes"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "no",
+                                "title": "No"
+                            }
+                        ],
+                        "text": [
+                            "Do you like butts? The last time, you said {{user.likes_butts}}"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Cool, just asking."
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "yes_thread"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Hrrm."
+                        ]
+                    },
+                    {
+                        "action": "stop"
+                    }
+                ],
+                "topic": "no_thread"
+            },
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "repeat",
+                                    "pattern": "default",
+                                    "default": true
+                                },
+                                {
+                                    "action": "yes_thread",
+                                    "type": "string",
+                                    "pattern": "yes"
+                                },
+                                {
+                                    "action": "no_thread",
+                                    "type": "string",
+                                    "pattern": "no"
+                                }
+                            ],
+                            "key": "likes_butts"
+                        },
+                        "quick_replies": [
+                            {
+                                "content_type": "text",
+                                "payload": "yes",
+                                "title": "Yes"
+                            },
+                            {
+                                "content_type": "text",
+                                "payload": "no",
+                                "title": "No"
+                            }
+                        ],
+                        "text": [
+                            "Huh? I said DO YOU LIKE BUTTS?"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "huh"
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "butts",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "id": 156,
+                "type": "string",
+                "name": "likes_butts"
+            },
+            {
+                "id": 231,
+                "type": "string",
+                "name": "butts"
+            },
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "questions",
+        "description": "questions",
+        "script": [
+            {
+                "script": [
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_1"
+                        },
+                        "text": [
+                            "Question 1"
+                        ]
+                    },
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_2"
+                        },
+                        "text": [
+                            "Question 2"
+                        ]
+                    },
+                    {
+                        "collect": {
+                            "options": [
+                                {
+                                    "action": "next",
+                                    "pattern": "default",
+                                    "default": true
+                                }
+                            ],
+                            "key": "question_3"
+                        },
+                        "text": [
+                            "Question 3"
+                        ]
+                    },
+                    {
+                        "action": "complete"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Looks like you got distracted. We can continue later."
+                        ]
+                    },
+                    {
+                        "action": "timeout"
+                    }
+                ],
+                "topic": "on_timeout"
+            }
+        ],
+        "triggers": [
+            {
+                "pattern": "questions",
+                "type": "string"
+            }
+        ],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": []
+    },
+    {
+        "command": "welcome_user",
+        "description": "Initial welcome script sent when a user connects to chat",
+        "script": [
+            {
+                "script": [
+                    {
+                        "text": [
+                            "Hello! I am a bot!"
+                        ]
+                    },
+                    {
+                        "execute": {
+                            "thread": "default",
+                            "script": "menu"
+                        },
+                        "action": "execute_script"
+                    }
+                ],
+                "topic": "default"
+            },
+            {
+                "topic": "welcome_back",
+                "script": [
+                    {
+                        "text": [
+                            "Hello! Good to see you again."
+                        ]
+                    },
+                    {
+                        "action": "execute_script",
+                        "execute": {
+                            "script": "menu",
+                            "thread": "default"
+                        }
+                    }
+                ]
+            }
+        ],
+        "triggers": [],
+        "variables": [
+            {
+                "type": "string",
+                "name": "question_1"
+            },
+            {
+                "type": "string",
+                "name": "question_2"
+            },
+            {
+                "type": "string",
+                "name": "question_3"
+            }
+        ],
+        "tags": [
+            "events",
+            "builtin"
+        ]
+    }
+]

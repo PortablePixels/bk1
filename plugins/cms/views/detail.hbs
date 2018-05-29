@@ -1,0 +1,113 @@
+<script src="/plugins/cms/controller.js"></script>
+
+<div class="workspace" ng-controller="view_script" >
+  <section>
+    <div class="dialog_navigator pane">
+      <h2>Dialog Navigator</h2>
+
+      <div class="toolbar">
+        <ul>
+          <li>
+            <button ng-click="newThread()">New Thread</button>
+          </li>
+          <li>
+            <button ng-click="save()">Save</button>
+          </li>
+          <li>
+            <button ng-click="logScript()">Debug</button>
+          </li>
+        </ul>
+      </div>
+
+      <section>
+        <h3>Threads in {% ui.script.command %}</h3>
+        <ul ng-if="ui.script">
+          <li ng-repeat="thread in ui.script.threads" ng-if="thread.topic=='default'" ng-click="selectThread(thread.topic);" class="ng-class:{selected: (thread.topic==ui.current_thread.topic)};">
+            {% thread.topic %}
+          </li>
+          <li ng-repeat="thread in ui.script.threads | orderBy: 'thread.topic'"  ng-click="selectThread(thread.topic);" ng-if="thread.topic!='default'" class="ng-class:{selected: (thread.topic==ui.current_thread.topic)};">
+            {% thread.topic %}
+          </li>
+        </ul>
+      </section>
+
+
+      <section>
+        <form ng-submit="search()" action="post">
+          <input type="search" ng-model="ui.search" placeholder="Search Dialog Library" />
+        </form>
+      </section>
+
+
+
+
+    </div>
+    <div class="dialog_view pane">
+      <header>
+        <div class="breadcrumbs">
+            <ul>
+                <li><a href="/admin/cms">Dialog</a></li>
+                <li>{% ui.script.command %}</li>
+                <li>{% ui.current_thread.topic %}</li>
+            </ul>
+        </div>
+        <h1>{% ui.current_thread.topic %}</h1>
+        <p>This is a description of the thread currently in view</p>
+
+      </header>
+      <div class="message_list">
+
+        <div
+          dnd-list="ui.current_thread.messages"
+          dnd-allowed-types="['message']"
+        >
+
+          <div ng-repeat="message in ui.current_thread.messages" class="line" ng-click="editMessage(message)"
+            dnd-draggable="message"
+            dnd-moved="ui.current_thread.messages.splice($index, 1);"
+            dnd-effect-allowed="move"
+            dnd-type="'message'"
+
+          >
+            <div class="message fromBot">
+              <!-- this is the bubble with text or other content in it -->
+              <div ng-if="message.text" class="text" ng-bind-html="render(message)"></div>
+
+            </div>
+            <!-- this should be the last thing in the message after any attachments -->
+            <div ng-if="message.capture_input">
+              <div ng-repeat="branch in message.branches" ng-if="branch.quick_reply" class="quick_reply">
+                {% branch.quick_reply_title || branch.pattern %}
+              </div>
+
+              <!-- <div>
+                Collect answer in <span class="variable">{% message.key %}</span>
+              </div>
+              <div ng-repeat="branch in message.branches">
+                if TEST({% branch.pattern %}, <span class="variable">{% message.key %}</span>) THEN action
+              </div>
+              -->
+
+            </div>
+          </div>
+
+          <div class="dndPlaceholder line">
+            <div class="message">
+              <div class="text">...</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="addMessageWidget">
+          <button ng-click="addMessage(true)">Add Message</button>
+        </div>
+      </div>
+      <div class="composer">
+        <form method="post" ng-submit="addMessage()">
+          <input type="text" ng-model="ui.new_message" placeholder="Compose message here" />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>

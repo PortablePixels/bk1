@@ -1,0 +1,40 @@
+<script src="/plugins/humans/controller.js"></script>
+
+<div ng-controller="view_humans" class="wrapper">
+  <h1>Humans</h1>
+
+  <div class="toolbar">
+    <ul>
+      <li>
+        <button ng-disabled="!ui.bulkOps">Export</button>
+      </li>
+      <li>
+        <button ng-disabled="!ui.bulkOps">Delete</button>
+      </li>
+    </ul>
+  </div>
+  <table class="cells" cellspacing="0" cellpadding="0">
+    <tr class="header">
+    <th class="select" ng-click="selectAll(ui.humans)">
+        <input type="checkbox" ng-checked="ui.selectAll" />
+    </th>
+      <th class="cell">
+        User ID
+      </th>
+      <th class="cell right">
+        Created
+      </th>
+    </tr>
+    <tr ng-repeat="human in ui.humans"  class="ng-class:{selected: human.selected};">
+        <td class="cell select" ng-click="select(human, ui.humans)" >
+            <input type="checkbox" ng-checked="human.selected" />
+        </td>
+      <td class="cell">
+        <a ng-href="/admin/humans/{% human.id %}">{% human.id %}</a>
+      </td>
+      <td class="cell right">
+        {% human.created | date : "mediumDate" %}
+      </td>
+    </tr>
+  </table>
+</div>

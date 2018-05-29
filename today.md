@@ -1,5 +1,14 @@
 # TODAY'S GOALS
 
+
+5/16
+
+Get BK1 working with SmokeFree
+
+* Port remaining skills over to new syntax
+* Message history plugin
+
+
 5/15
 
 Get BK1 working with SmokeFree

@@ -19,11 +19,19 @@ module.exports = function(botkit) {
           if (typeof(plugin)=='function') {
             plugin = plugin(botkit);
           }
-          harness.register(plugin.name, plugin);
+          try {
+              harness.register(plugin.name, plugin);
+          } catch(err) {
+              console.log('SHIT ERROR IN REGISTER', err);
+          }
         },
         register: function(name, endpoints) {
 
             debug('Enabling plugin: ', name);
+            if (plugins.indexOf(name) >= 0) {
+                debug('Plugin already enabled:', name);
+                return;
+            }
             plugins.push(name);
 
             // register all the web endpoints
@@ -58,7 +66,14 @@ module.exports = function(botkit) {
             }
 
             if (endpoints.init) {
-              endpoints.init(botkit);
+              try {
+                  endpoints.init(botkit);
+              } catch(err) {
+                  console.log('CAT H ERRORRERER');
+                  if (err) {
+                      throw new Error(err);
+                  }
+              }
             }
 
             debug('Plugin Enabled: ', name);

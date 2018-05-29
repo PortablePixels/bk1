@@ -26,9 +26,6 @@ module.exports = function(botkit) {
               function(bot, message, next) {
                 if (bot.type=='web') {
                   message.type = 'message';
-                  if (Array.isArray(message.text)) {
-                    message.text = message.text[0];
-                  }
                 }
                 next();
               }

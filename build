@@ -1,0 +1,2 @@
+sass --update sass:public/css
+bower install

@@ -50,15 +50,23 @@ module.exports = function(botkit) {
           } else {
             botkit.middleware.understand.run(bot, message, response, function(err, bot, message, response) {
                 if (err) {
+                  console.error('Rejecting after understand', err);
                   return reject(err);
                 }
-
                 botkit.trigger(message.type, [bot, message]);
+
                 resolve(response);
             });
           }
         });
     }
+
+    botkit.middleware.send.use(function(bot, message, next) {
+      if (Array.isArray(message.text)) {
+        message.text = message.text[Math.floor(Math.random()*message.text.length)];
+      }
+      next();
+    });
 
     botkit.middleware.beforeScript.use(function(convo, next) {
       debug('BEFORE ', convo.script.command);

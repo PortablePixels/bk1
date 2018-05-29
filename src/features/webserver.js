@@ -25,7 +25,7 @@ module.exports = function(botkit) {
     // use handlebars
     webserver.set('view engine', 'hbs');
 
-    webserver.use(express.static('public'));
+    webserver.use(express.static(__dirname + '/../../public'));
 
     var authFunction = basicAuth({
       users: { 'admin': 'supersecret' },

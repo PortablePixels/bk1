@@ -23,7 +23,9 @@ module.exports = function(botkit) {
         this.state = state;
         if (!this.state.vars) {
           this.state.vars = {};
-          this.state.user_vars = {};
+        }
+        if (!this.state.user_vars) {
+            this.state.user_vars = {};
         }
 
         // the source script
@@ -34,13 +36,73 @@ module.exports = function(botkit) {
 
         this.replies = [];
 
+        // a function to back-translate version 2 scripts to version 1
+        this.transformVersion2to1 = function(script) {
+
+            function transformMessage(message) {
+
+                if (message.capture_input) {
+                    message.collect = {
+                        key: message.key,
+                        options: message.branches ? message.branches.map(function(b) {
+                            return {
+                                pattern: b.pattern,
+                                action: b.action,
+                            }
+                        }) : null,
+                    }
+
+                    message.quick_replies = message.branches ? message.branches.filter(function(b) {
+                        return b.quick_reply;
+                    }).map(function(b) {
+                        return {
+                            title: b.quick_reply_title,
+                            payload: b.pattern
+                        }
+                    }) : null;
+
+                    delete(message.capture_input);
+                    delete(message.branches);
+                    delete(message.key);
+                }
+
+                return message;
+
+            }
+
+            function transformThread(thread) {
+                return {
+                    topic: thread.topic,
+                    script: thread.messages.map(transformMessage)
+                }
+            }
+
+            var version1 = {
+                command: script.command,
+                created: script.created,
+                modified: script.modified,
+                script: script.threads.map(transformThread),
+            }
+
+            return version1;
+
+        }
 
         this.ingestScript = function(script) {
           var that = this;
-          that.script = script;
+
+          // TODO: Eventually this will switch and we will process v2 scripts by default
+          if (script.version == 2) {
+              that.script = that.transformVersion2to1(script);
+          } else {
+              that.script = script;
+          }
+
+
           for (var x = 0; x < that.script.script.length; x++) {
             that.threads[that.script.script[x].topic] = that.script.script[x].script;
           }
+
         }
 
         this.setUser = function(uid) {
@@ -81,8 +143,7 @@ module.exports = function(botkit) {
         }
 
         this.extractResponses = function() {
-
-          return this.state.user_vars ? this.user_vars : {};
+          return this.state.user_vars ? this.state.user_vars : {};
         }
 
         this.kickoff = function(force) {
@@ -108,7 +169,6 @@ module.exports = function(botkit) {
         this.updateSession = function() {
             var that = this;
             return new Promise(function(resolve, reject) {
-
                 botkit.db.sessions.findOneAndUpdate({
                     user: that.context.user,
                     channel: that.context.channel,
@@ -175,17 +235,22 @@ module.exports = function(botkit) {
                       template.user = that.context.user;
 
                       var reply = that.processTemplate(template);
+                      reply.to = that.context.user;
+
                       q.add(that.context.user, reply);
 
                   }
 
                   // tell the queue how to process messages in this queue
                   q.work(that.context.user, function(reply, next) {
-
                       // todo: it would be better to spawn a new bot to send this
                       // but right now that might not be possible because of sockets?
                       bot.say(reply).then(function() {
                           next();
+                      }).catch(function(err) {
+                        console.error('Error sending message', err);
+                        // TODO: Retry!!!-- shouild probably be implemented inside platform adapters
+                        next();
                       });
                   }, {
                       maxWorkers: 1
@@ -211,6 +276,11 @@ module.exports = function(botkit) {
                     that.captureResponse().then(function() {
 
                         var thread = that.threads[that.state.thread];
+
+                        // empty thread, all done
+                        if (!thread) {
+                            return resolve([]);
+                        }
 
                         if (that.status=='active' && that.state.cursor < thread.length) {
                             var reply = thread[that.state.cursor];
@@ -395,7 +465,6 @@ module.exports = function(botkit) {
 
                     botkit.middleware.onChange.run(that, condition.key, that.context.incoming_message.text, function(err, that, key, val) {
                         if (err) {
-                          console.log('ERROR IN ON CHANGE CAPTURED AND REJECTING CAPTURERESPONSE');
                           reject(err);
                         } else {
                           if (condition.options) {

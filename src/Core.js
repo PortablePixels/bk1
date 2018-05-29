@@ -44,11 +44,12 @@ module.exports = function(config) {
             botkit.ingest(bot, message).then(function(message) {
               botkit.understand(bot, message).then(function(response) {
                 debug('Response: ', response);
-                var convo = botkit.createConversation(message, bot, response.state, response.script);
-                convo.fulfill();
+                if (response.script && response.script) {
+                  var convo = botkit.createConversation(message, bot, response.state, response.script);
+                  convo.fulfill();
+                }
               });
             });
-
         },
         loadSkills: function(path) {
             var normalizedPath = require("path").join(path);
@@ -81,7 +82,6 @@ module.exports = function(config) {
         }
     }
 
-
     // basic emitting and handling of events
     require(__dirname + '/features/events.js')(botkit);
 
@@ -91,28 +91,41 @@ module.exports = function(config) {
     // Add pre-configured Express webserver
     require(__dirname + '/features/plugin_loader.js')(botkit);
 
-    // database models and access routines
-    require(__dirname + '/features/database.js')(botkit);
-
     // expose middleware endpoints and processes for processing messages
     require(__dirname + '/features/middleware.js')(botkit);
 
+    if (config.studio_token) {
 
-    // set up the ability to walk through a semi-scripted conversation
-    require(__dirname + '/features/conversation.js')(botkit);
+      // database models and access routines
+      require(__dirname + '/features/database.js')(botkit);
 
-    // API calls to botkit studio
-    require(__dirname + '/features/API.js')(botkit);
+      // set up the ability to walk through a semi-scripted conversation
+      require(__dirname + '/features/conversation.js')(botkit);
 
-    // methods for understanding the intent or purpose of the message
-    // including connecting it to an already existing conversation
-    require(__dirname + '/features/understand_sessions.js')(botkit);
+      // API calls to botkit studio
+      require(__dirname + '/features/API.js')(botkit);
 
-    // add ability to "hear" simple triggers in message events
-    require(__dirname + '/features/understand_hearing.js')(botkit);
+      // methods for understanding the intent or purpose of the message
+      // including connecting it to an already existing conversation
+      require(__dirname + '/features/understand_sessions.js')(botkit);
 
-    // add ability to "hear" simple triggers in message events
-    require(__dirname + '/features/understand_remote_triggers.js')(botkit);
+      // add ability to "hear" simple triggers in message events
+      require(__dirname + '/features/understand_hearing.js')(botkit);
+
+      // add ability to "hear" simple triggers in message events
+      // require(__dirname + '/features/understand_remote_triggers.js')(botkit);
+
+      try {
+          botkit.use(require(__dirname + '/plugins/plugin_manager/plugin.js'));
+      } catch(err) {
+          console.log('Caught error in plugin loader', err);
+      }
+
+    } else {
+
+      botkit.use(require(__dirname + '/plugins/activate/plugin.js'));
+
+    }
 
 
     return botkit;

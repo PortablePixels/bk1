@@ -1,15 +1,19 @@
+var env = require('node-env-file');
+env(__dirname + '/.env');
+
 var config = {
-  studio_token: 'VSZ3RwPWqaTyLGN79lMM99dOzJogvNQeLFVQI7sdw9ZmnV5D5mKhiLfFsNBDDOyI',
+  // studio_token: 'VSZ3RwPWqaTyLGN79lMM99dOzJogvNQeLFVQI7sdw9ZmnV5D5mKhiLfFsNBDDOyI',
+  studio_token: process.env.studio_token,
+  slack: {
+    clientId: process.env.SLACK_CLIENTID,
+    clientSecret: process.env.SLACK_CLIENTSECRET,
+    scopes: ['bot','commands']
+  }
 }
 
 var botkit = require(__dirname + '/src/Core.js')(config)
 
 botkit.loadSkills(__dirname + '/skills');
-
-botkit.use(require(__dirname + '/plugins/console.js'));
-botkit.use(require(__dirname + '/plugins/index.js'));
-botkit.use(require(__dirname + '/plugins/botkit-adapter-web/plugin.js'));
-
 
 botkit.boot();
 

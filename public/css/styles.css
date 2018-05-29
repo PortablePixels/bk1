@@ -1,0 +1,364 @@
+/* shared botkit ui styles */
+* {
+  box-sizing: border-box; }
+
+body,
+html {
+  margin: 0;
+  height: 100%;
+  padding: 0;
+  font-size: 18px;
+  background-color: #FFF;
+  font-family: 'helvetica', sans-serif; }
+
+a {
+  color: #1432e0; }
+
+h1 {
+  font-weight: normal;
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem; }
+
+h2 {
+  font-weight: normal;
+  font-size: 1.25rem;
+  margin-top: 0; }
+
+h3 {
+  font-size: 1rem;
+  margin-top: 0; }
+
+textarea,
+input[type="text"],
+input[type="search"],
+input[type="password"] {
+  width: 100%; }
+
+.breadcrumbs {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem; }
+  .breadcrumbs ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .breadcrumbs ul li {
+      display: inline-block; }
+      .breadcrumbs ul li a {
+        color: #CCC;
+        text-decoration: none; }
+        .breadcrumbs ul li a:hover {
+          color: blue;
+          text-decoration: underline; }
+      .breadcrumbs ul li:after {
+        content: '/';
+        margin: 0 0.5rem;
+        color: #CCC;
+        display: inline-block; }
+      .breadcrumbs ul li:last-child:after {
+        display: none; }
+
+.outside_wrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100%; }
+
+.wrapper {
+  padding: 1rem;
+  margin: 0 auto; }
+
+.pane {
+  margin-bottom: 1rem;
+  border: 1px solid #CCC;
+  padding: 0.75rem; }
+
+nav {
+  flex-shrink: 0;
+  flex-grow: 0;
+  background-color: #333; }
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0rem; }
+
+nav ul li a {
+  display: block;
+  text-decoration: none;
+  font-size: 12px;
+  color: #FFF; }
+
+nav ul li .icon {
+  font-size: 2rem;
+  display: block; }
+
+nav ul li {
+  padding: 0.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem; }
+
+nav ul li:hover {
+  background-color: #4d4d4d;
+  border-radius: 4px; }
+
+.content_wrapper {
+  flex-grow: 1;
+  height: 100%;
+  overflow: auto; }
+
+table.cells {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  font-size: 0.8rem; }
+
+table.cells th {
+  text-align: left;
+  font-weight: normal;
+  border-right: 1px solid #666666; }
+
+table.cells .right {
+  text-align: right; }
+
+table.cells td,
+table.cells th {
+  padding: 0.75rem 0.75rem; }
+  table.cells td.select,
+  table.cells th.select {
+    width: 60px;
+    text-align: center; }
+
+table.cells tr:hover td {
+  background: #F0F0F0; }
+table.cells tr:hover.selected td {
+  background: #FFFF99; }
+
+table.cells tr.dndPlaceholder td {
+  background: #ffffCC;
+  padding: 2rem; }
+
+table.cells tr.selected {
+  background: #ffffCC; }
+
+table.cells td {
+  border-bottom: 1px solid #CCC;
+  border-right: 1px solid #CCC; }
+  table.cells td:last-child {
+    border-right: 0; }
+
+table.cells tr:nth-child(2n+1) {
+  background: #F8F7FF; }
+  table.cells tr:nth-child(2n+1).selected {
+    background: #ffffCC; }
+
+table.cells tr.header {
+  background: #333;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+  z-index: 2; }
+
+.toolbar {
+  border-top: 1px solid #CCC;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  position: relative; }
+  .toolbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .toolbar ul li {
+      display: inline-block;
+      padding: 0.25rem;
+      border-right: 1px solid #CCC; }
+      .toolbar ul li input[type="search"] {
+        margin: 6px; }
+      .toolbar ul li button {
+        background: transparent;
+        border: 0;
+        padding: 0.5rem 1rem;
+        border-radius: 3px;
+        outline: none; }
+        .toolbar ul li button:disabled {
+          color: #CCC; }
+          .toolbar ul li button:disabled:hover {
+            background: #f7f7f7; }
+        .toolbar ul li button:hover {
+          background: #DDD; }
+        .toolbar ul li button:active {
+          background: hotpink;
+          color: #fff; }
+    .toolbar ul.right {
+      position: absolute;
+      right: 0;
+      top: 0; }
+      .toolbar ul.right li {
+        border-left: 1px solid #CCC;
+        border-right: 0; }
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  height: 100%; }
+  .workspace > header {
+    flex: 0;
+    padding: 0.75rem; }
+  .workspace > section {
+    flex: 1;
+    display: flex;
+    flex-direction: row; }
+  .workspace .pane {
+    border-left: 0;
+    border-bottom: 0;
+    margin-bottom: 0;
+    padding: 0; }
+    .workspace .pane h2 {
+      border-bottom: 1px solid #CCC;
+      padding: 0.75rem;
+      margin: 0; }
+    .workspace .pane:last-child {
+      border-right: 0; }
+    .workspace .pane section {
+      padding: 0.75rem; }
+
+.dialog_navigator {
+  flex: 0 1 300px; }
+  @media all and (max-width: 1000px) {
+    .dialog_navigator {
+      display: none; } }
+  .dialog_navigator form input[type="search"] {
+    width: 100%; }
+  .dialog_navigator .toolbar {
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #CCC; }
+  .dialog_navigator ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .dialog_navigator ul li {
+      list-style-type: disc;
+      list-style-position: inside; }
+      .dialog_navigator ul li.selected {
+        background: #F0F0F0; }
+
+.dialog_view {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+  .dialog_view header {
+    flex: 0;
+    padding: 0.75rem;
+    border-bottom: 1px solid #CCC; }
+  .dialog_view .message_list {
+    flex: 1; }
+  .dialog_view .composer {
+    flex: 0;
+    height: 60px;
+    border-top: 1px solid #CCC;
+    padding: 0.75rem; }
+    .dialog_view .composer form {
+      display: flex; }
+      .dialog_view .composer form input[type="text"] {
+        flex: 1;
+        margin-right: 1rem;
+        border: 0;
+        outline: none; }
+
+.message_list .line {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-left: 10px solid transparent;
+  padding-left: 1rem; }
+  .message_list .line:hover {
+    border-left: 10px solid #000; }
+.message_list .addMessageWidget {
+  border-top: 1px dashed #CCC;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  padding-left: calc(1rem + 10px); }
+.message_list .line:after {
+  content: ' ';
+  display: block;
+  clear: both; }
+.message_list .message .text {
+  padding: 0.5rem;
+  border-radius: 20px;
+  max-width: 60%; }
+.message_list .message:after {
+  content: ' ';
+  display: block;
+  clear: both; }
+.message_list .fromBot .text {
+  float: left;
+  background: #CCC; }
+.message_list .fromUser .text {
+  float: right;
+  background: blue;
+  color: #FFF; }
+.message_list .quick_reply {
+  display: inline-block;
+  border-radius: 20px;
+  color: purple;
+  border: 1px solid purple;
+  padding: 0.25rem 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem; }
+  .message_list .quick_reply:last-child {
+    margin-right: 0; }
+.message_list .variable {
+  border-radius: 20px;
+  padding: 0.25rem;
+  color: #000;
+  background: #d6edf7; }
+
+.dialog_overlay {
+  display: none;
+  padding: 1rem; }
+  .dialog_overlay.active {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000; }
+  .dialog_overlay .dialog {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    max-height: 90%;
+    overflow: hidden;
+    max-width: 1000px;
+    width: 80%;
+    min-width: 320px;
+    background: #FFF;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; }
+    .dialog_overlay .dialog header {
+      border-bottom: 1px solid #CCC;
+      padding: 0.75rem; }
+    .dialog_overlay .dialog footer {
+      border-top: 1px solid #CCC;
+      padding: 0.75rem;
+      background: #333; }
+    .dialog_overlay .dialog section {
+      display: block;
+      flex: 1;
+      flex-basis: auto;
+      overflow-y: auto; }
+      .dialog_overlay .dialog section.pane {
+        padding: 0.75rem;
+        border-bottom: 0;
+        margin-bottom: 0; }
+
+.message_detail textarea {
+  height: 100px;
+  font-size: 1.5rem;
+  line-height: 125%; }
+
+/*# sourceMappingURL=styles.css.map */

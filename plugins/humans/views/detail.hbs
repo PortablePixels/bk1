@@ -1,0 +1,36 @@
+<script src="/plugins/humans/controller.js"></script>
+
+<div ng-controller="view_human" class="wrapper">
+    <div class="breadcrumbs">
+        <ul>
+            <li><a href="/admin/humans">Humans</a></li>
+            <li>{% ui.user_id %}</li>
+        </ul>
+    </div>
+  <h1>ID: {% ui.human.id %}</h1>
+
+  <div class="pane">
+
+      <p>Updated: {% ui.human.modified | date: "short" %}</p>
+      <p>Created: {% ui.human.created | date: "short" %}</p>
+
+
+      <h2>User Fields</h2>
+      <div class="toolbar">
+        <ul>
+            <li><a ng-href="/admin/transcripts/{% ui.human.id %}" class="button">Transcript</a></li>
+        </ul>
+        </div>
+      <table class="cells" cellspacing="0" cellpadding="0">
+          <tr class="header">
+              <th>Field</th>
+              <th>Value</th>
+          </tr>
+          <tr ng-repeat="(key,val) in ui.human.facts">
+              <td>{% key %}</td>
+              <td><input type="text" ng-model="val"></td>
+          </tr>
+      </table>
+  </div>
+
+</div>

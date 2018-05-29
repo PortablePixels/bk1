@@ -1,0 +1,24 @@
+<script src="/plugins/plugins/plugins_controller.js"></script>
+<link rel="stylesheet" href="/plugins/plugins/css/styles.css" />
+<div class="pane" ng-controller="pluginManager">
+    <h1>Manage Plugins</h1>
+
+    <div class="toolbar">
+        <ul>
+            <li><button ng-click="savePlugins()">Update Settings</button></li>
+        </ul>
+    </div>
+    <ul class="available_plugins">
+        <li ng-repeat="plugin in ui.plugins" class="ng-class:{enabled: plugin.enabled};">
+            <div class="enabled_checkbox" ng-click="plugin.enabled = !plugin.enabled">
+                <input type="checkbox" ng-checked="plugin.enabled" >
+            </div>
+            <div class="plugin_info">
+                <strong>{% plugin.name %}</strong>
+                <p>{% plugin.description %}</p>
+                <p>Most recent version: {% plugin.version %}</p>
+            </div>
+        </li>
+    </ul>
+
+</div>

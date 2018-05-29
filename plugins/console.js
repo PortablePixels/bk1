@@ -3,6 +3,9 @@ const readline = require('readline');
 module.exports = function(botkit) {
         return {
             name: 'Console Bot Adapter',
+            init: function() {
+                var bot = botkit.spawn('console',{});
+            },
             middleware: {
                 spawn: [
                     function(bot, next) {

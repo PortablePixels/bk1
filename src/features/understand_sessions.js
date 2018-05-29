@@ -3,7 +3,6 @@ var events_to_evaluate = [];
 
 module.exports = function(botkit) {
 
-
     botkit.listenToEvent = function(event_name) {
       if (events_to_evaluate.indexOf(event_name) < 0) {
         events_to_evaluate.push(event_name);
