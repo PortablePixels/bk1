@@ -237,15 +237,11 @@ module.exports = function(botkit) {
                       var reply = that.processTemplate(template);
                       reply.to = that.context.user;
 
-                      if (
-                          (reply.action && Object.keys(reply).length == 1) ||
-                          (reply.action && reply.execute && Object.keys(reply).length == 2)
-                        ) {
-                        // skip this because it is an action directive with no text or attachments
-                      } else {
+                      // send only if it has some real payload
+                      // TODO: there should be a better way to indicate messages not to send
+                      if (reply.text || reply.quick_replies || reply.platforms || reply.attachments || reply.attachment) {
                         q.add(that.context.user, reply);
                       }
-
                   }
 
                   // tell the queue how to process messages in this queue
