@@ -1,11 +1,19 @@
 # TODAY'S GOALS
 
 
-5/16
+5/30
+
+Start doing new dev in BK1.
+
+* Message history plugin
+* figure out how to handle conversation timeouts / status on new connection (IE, when I connect, i want to resume convo, not always restart... but sometimes I DO want to timeout and do something else)
+
+
+5/29
 
 Get BK1 working with SmokeFree
 
-* Port remaining skills over to new syntax
+x Port remaining skills over to new syntax
 * Message history plugin
 
 

@@ -61,12 +61,46 @@ module.exports = function(botkit) {
         });
     }
 
+
+    // choose randomly from message text variants
     botkit.middleware.send.use(function(bot, message, next) {
       if (Array.isArray(message.text)) {
         message.text = message.text[Math.floor(Math.random()*message.text.length)];
       }
       next();
     });
+
+
+    // copy in custom fields
+    botkit.middleware.send.use(function(bot, message, next) {
+      if (message.meta && message.meta.length) {
+        for (var m = 0; m < message.meta.length; m++) {
+          message[message.meta[m].key] = message.meta[m].value;
+        }
+      }
+
+      // remove unnecessary fields
+      delete(message.meta);
+
+      next();
+    });
+
+
+    // copy in platform specific fields
+    botkit.middleware.send.use(function(bot, message, next) {
+      if (message.platforms && message.platforms[bot.type]) {
+        for (var key in message.platforms[bot.type]) {
+          message[key] = message.platforms[bot.type][key];
+        }
+      }
+
+      // remove unnecessary fields
+      delete(message.platforms);
+      next();
+    });
+
+
+
 
     botkit.middleware.beforeScript.use(function(convo, next) {
       debug('BEFORE ', convo.script.command);
