@@ -16,24 +16,33 @@ module.exports = function(config) {
 
     var botkit = {
         config: config,
+        LIB_PATH: __dirname,
         boot: function() {
             debug('Booting bot...');
             var that = this;
             var has_db = false;
             var has_ws = false;
+            var plugins_loaded = false;
 
             that.on('boot:database_connected', function() {
               has_db = true;
-              if (has_ws) {
+              if (has_ws && plugins_loaded) {
                 that.trigger('booted',[that]);
               }
             });
             that.on('boot:webserver_up', function() {
               has_ws = true;
-              if (has_db) {
+              if (has_db && plugins_loaded) {
                 that.trigger('booted',[that]);
               }
             });
+            that.on('boot:plugins_loaded', function() {
+              plugins_loaded = true;
+              if (has_db && has_ws) {
+                that.trigger('booted',[that]);
+              }
+            });
+
 
             that.on('booted',function(controller) {
               debug('Boot complete!');
@@ -115,11 +124,15 @@ module.exports = function(config) {
       // add ability to "hear" simple triggers in message events
       // require(__dirname + '/features/understand_remote_triggers.js')(botkit);
 
-      // try {
-      //     botkit.use(require(__dirname + '/plugins/plugin_manager/plugin.js'));
-      // } catch(err) {
-      //     console.log('Caught error in plugin loader', err);
-      // }
+      try {
+          botkit.use(require(__dirname + '/plugins/plugin_manager/plugin.js'));
+      } catch(err) {
+          console.log('Caught error in plugin loader', err);
+      }
+
+      botkit.use(require(__dirname + '/plugins/index.js'));
+
+
 
     } else {
 

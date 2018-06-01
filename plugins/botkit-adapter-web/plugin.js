@@ -14,21 +14,29 @@ module.exports = function(botkit) {
                 res.render(relativePath + '/chat');
             }
         }],
-        menu: [
-            {
-              title: 'Chat',
-              url: '/chat',
-              icon: '💬',
-            }
-        ],
+        menu: [{
+            title: 'Chat',
+            url: '/chat',
+            icon: '💬',
+        }],
         middleware: {
             send: [
-              function(bot, message, next) {
-                if (bot.type=='web') {
-                  message.type = 'message';
+                function(bot, message, next) {
+                    if (bot.type == 'web' && message.files && message.files.length) {
+                        for (var f = 0; f < message.files.length; f++) {
+                            // determine if this is an image or any other type of file.
+                            message.files[f].image =
+                                (message.files[f].url.match(/\.(jpeg|jpg|gif|png)$/i) != null);
+                        }
+                    }
+                    next();
+                },
+                function(bot, message, next) {
+                    if (bot.type == 'web') {
+                        message.type = 'message';
+                    }
+                    next();
                 }
-                next();
-              }
             ],
             spawn: [
                 function(bot, next) {
@@ -41,7 +49,7 @@ module.exports = function(botkit) {
                                         try {
                                             if (bot.ws && bot.ws.readyState === WebSocket.OPEN) {
                                                 if (!message.type) {
-                                                  message.type = 'outgoing';
+                                                    message.type = 'outgoing';
                                                 }
                                                 bot.ws.send(JSON.stringify(message), function(err) {
                                                     if (err) {
@@ -188,23 +196,23 @@ module.exports = function(botkit) {
             ws.isAlive = true;
             ws.on('pong', heartbeat);
 
-            botkit.spawn('web',{}).then(function(bot) {
-              bot.ws = ws;
-              bot.connected = true;
+            botkit.spawn('web', {}).then(function(bot) {
+                bot.ws = ws;
+                bot.connected = true;
 
-              ws.on('message', function incoming(message) {
+                ws.on('message', function incoming(message) {
 
-                  var message = JSON.parse(message);
-                  botkit.receive(bot, message, ws);
+                    var message = JSON.parse(message);
+                    botkit.receive(bot, message, ws);
 
-              });
+                });
 
-              ws.on('error', (err) => console.log('Websocket Error: ', err));
+                ws.on('error', (err) => console.log('Websocket Error: ', err));
 
-              ws.on('close', function(err) {
-                  // console.log('CLOSED', err);
-                  bot.connected = false;
-              });
+                ws.on('close', function(err) {
+                    // console.log('CLOSED', err);
+                    bot.connected = false;
+                });
             });
 
         });

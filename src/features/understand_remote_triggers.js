@@ -24,21 +24,8 @@ module.exports = function(botkit) {
         };
         response.script = script;
 
-        var session = new botkit.db.sessions(
-          {
-            user: message.user,
-            channel: message.channel,
-            state: response.state,
-            script: response.script,
-          }
-        );
-        session.save(function(err) {
-          if (err) {
-            next(err);
-          } else {
-            next();
-          }
-        })
+        next();
+
       }).catch(next);
 
     });

@@ -91,17 +91,22 @@ module.exports = function(botkit) {
         this.ingestScript = function(script) {
           var that = this;
 
-          // TODO: Eventually this will switch and we will process v2 scripts by default
-          if (script.version == 2) {
-              that.script = that.transformVersion2to1(script);
-          } else {
-              that.script = script;
-          }
+          return new Promise(function(resolve, reject) {
+
+            // TODO: Eventually this will switch and we will process v2 scripts by default
+            if (script.version == 2) {
+                that.script = that.transformVersion2to1(script);
+            } else {
+                that.script = script;
+            }
 
 
-          for (var x = 0; x < that.script.script.length; x++) {
-            that.threads[that.script.script[x].topic] = that.script.script[x].script;
-          }
+            for (var x = 0; x < that.script.script.length; x++) {
+              that.threads[that.script.script[x].topic] = that.script.script[x].script;
+            }
+
+            botkit.storeConversationState(that).then(resolve).catch(reject);
+          });
 
         }
 
@@ -166,27 +171,6 @@ module.exports = function(botkit) {
             });
         }
 
-        this.updateSession = function() {
-            var that = this;
-            return new Promise(function(resolve, reject) {
-                botkit.db.sessions.findOneAndUpdate({
-                    user: that.context.user,
-                    channel: that.context.channel,
-                }, {
-                    user: that.context.user,
-                    channel: that.context.channel,
-                    state: that.state,
-                    script: that.script,
-                }, {upsert: true}, function(err, res) {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(res);
-                    }
-
-                });
-            });
-        }
 
         this.processTemplate = function(obj) {
 
@@ -292,7 +276,7 @@ module.exports = function(botkit) {
                             that.replies.push(reply);
                             // pause for response
                             if (reply.collect) {
-                                that.updateSession().then(function() {
+                                botkit.storeConversationState(that).then(function() {
                                   resolve(that.replies);
                                 });
                             } else if (reply.action) {
@@ -309,17 +293,12 @@ module.exports = function(botkit) {
                               if (err) {
                                 reject(err);
                               } else {
-                                botkit.db.sessions.remove({
-                                    user: that.context.user,
-                                    channel: that.context.channel
-                                }, function(err) {
-                                    if (err) {
-                                        console.error('Could not remove session', err);
-                                        reject(err);
-                                    }  else {
-                                      resolve(that.replies);
-                                    }
-                                });
+                                botkit.endSession(that).then(function() {
+                                  resolve(that.replies);
+                                }).catch(function(err) {
+                                  console.error('Could not remove session', err);
+                                  reject(err);
+                                })
                               }
                             });
                         }
@@ -377,14 +356,14 @@ module.exports = function(botkit) {
                       // reset script and state
                       that.state.cursor = 0;
                       that.state.thread = 'default';
-                      that.ingestScript(script);
-
-                      if (options.thead) {
-                        that.kickoff(true).then(function() { that.gotoThread(options.thread).then(resolve).catch(reject) }).catch(reject);
-                      } else {
-                        // call any before things
-                        that.kickoff(true).then(resolve).catch(reject);
-                      }
+                      that.ingestScript(script).then(function() {
+                        if (options.thead) {
+                          that.kickoff(true).then(function() { that.gotoThread(options.thread).then(resolve).catch(reject) }).catch(reject);
+                        } else {
+                          // call any before things
+                          that.kickoff(true).then(resolve).catch(reject);
+                        }
+                      }).catch(reject);
                     });
 
                 }).catch(reject);
@@ -515,7 +494,9 @@ module.exports = function(botkit) {
 
         this.setUser(message.user);
         this.setChannel(message.channel);
-        this.ingestScript(script);
+        this.ingestScript(script).catch(function(err) {
+          console.error('Error creating conversation', err);
+        })
 
         return this;
 

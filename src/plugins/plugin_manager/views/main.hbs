@@ -8,8 +8,18 @@
             <li><button ng-click="savePlugins()">Update Settings</button></li>
         </ul>
     </div>
-    <ul class="available_plugins">
-        <li ng-repeat="plugin in ui.plugins" class="ng-class:{enabled: plugin.enabled};">
+    <ul class="available_plugins"
+
+    dnd-list="ui.plugins"
+    dnd-allowed-types="['plugin']"
+
+    >
+        <li ng-repeat="plugin in ui.plugins" class="ng-class:{enabled: plugin.enabled};"
+        dnd-draggable="plugin"
+        dnd-moved="ui.plugins.splice($index, 1);"
+        dnd-effect-allowed="move"
+        dnd-type="'plugin'"
+        >
             <div class="enabled_checkbox" ng-click="plugin.enabled = !plugin.enabled">
                 <input type="checkbox" ng-checked="plugin.enabled" >
             </div>

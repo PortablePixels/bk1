@@ -18,29 +18,12 @@ module.exports = function(botkit) {
     botkit.trigger('boot:database_connected',[]);
   });
 
-  var session = new Schema({
-    user: {
-      type: String,
-      index: true,
-    },
-    channel: {
-      type: String,
-      index: true,
-    },
-    state: {
-      type: 'Object',
-    },
-    script: {
-      type: 'Object',
-    }
-  });
 
   botkit.db = {
     mongoose: db,
     addModel: function(model, name, key) {
         botkit.db[key] = mongoose.model(name, new Schema(model), key);
-    },
-    sessions: mongoose.model('session', session),
+    }
   };
 
 }

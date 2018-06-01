@@ -1,1 +1,5 @@
 node_modules/
+.sass-cache/
+botkit_plugins.json
+plugins/
+today.md

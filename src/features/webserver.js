@@ -15,6 +15,9 @@ module.exports = function(botkit) {
     webserver.use(bodyParser.json());
     webserver.use(bodyParser.urlencoded({ extended: true }));
 
+    webserver.set('views', __dirname + '/../../views')
+
+
     hbs.registerPartials(__dirname + '/../../views/partials');
     hbs.localsAsTemplateData(webserver);
 
