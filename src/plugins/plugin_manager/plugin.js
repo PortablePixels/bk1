@@ -33,16 +33,20 @@ module.exports = function(botkit) {
             url: '/admin/api/plugins',
             method: 'get',
             handler: function(req, res) {
-                res.json(available_plugins);
+                var sorted_list = [];
+                for (var p = 0; p < enabled_plugins.length; p++) {
+                  sorted_list.push(available_plugins.filter(function(x) {
+                    return x.name == enabled_plugins[p].name;
+                  })[0]);
+                }
+                res.json(sorted_list.concat(available_plugins.filter(function(x) { return !x.enabled})));
             }
         },
         {
             url: '/admin/api/plugins',
             method: 'post',
             handler: function(req, res) {
-                console.log('GOT UPDATED PLUGINS', req.body);
                 var plugins = req.body.filter(function(p) { return p.enabled; }).map(function(p) { return {name: p.name, version: p.version}});
-                console.log('CURRENTLY ENABLED PLUGINS', plugins);
                 plugin.writePluginFile(plugins).then(function() {
                   res.json({ok:true});
                 }).catch(res.json);
@@ -113,9 +117,7 @@ module.exports = function(botkit) {
                         });
 
                         if (enabled.length == 1) {
-                            console.log('FOUND A PLUGIN TO ENABLE');
 
-                            // TODO: This should try to npm install the plugin if it isn't found
                             var plugin = null;
                             try {
                                 plugin = require(app_modules_folder + '/' + enabled[0].require);
@@ -128,10 +130,8 @@ module.exports = function(botkit) {
                                 next();
 
                             } catch (err) {
-                                console.error('Attempting to load install plugin', enabled[0].name);
-
+                                console.log('Downloading plugin', enabled[0].name);
                                 that.installWithNPM(enabled[0].install).then(function() {
-                                  console.log('Plugin installed successfully!');
 
                                   plugin = require(app_modules_folder + '/' + enabled[0].require);
 
@@ -155,8 +155,7 @@ module.exports = function(botkit) {
                             // console.log('FOUND MULTIPLE MATCHING PLUGINS OH NO');
                             next('Found multiple matching plugins');
                         } else {
-                            console.log('COUND NOT FIND ENABLED PLUGIN!!');
-                            next('Could not find enabled plugin');
+                            next('Could not find enabled plugin in registry');
                         }
                     }, function(err) {
                       if (err) {

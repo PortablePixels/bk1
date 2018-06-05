@@ -43,7 +43,6 @@ module.exports = function(config) {
               }
             });
 
-
             that.on('booted',function(controller) {
               debug('Boot complete!');
             });
@@ -73,8 +72,18 @@ module.exports = function(config) {
             say: function(message) {
               var that = this;
               return new Promise(function(resolve, reject) {
-                botkit.middleware.send.run(that, message, function(err, bot, message) {
-                  bot.send(message).then(resolve).catch(reject);
+                botkit.middleware.format.run(that, message, function(err, bot, message) {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    botkit.middleware.send.run(bot, message, function(err, bot, message) {
+                      if (err) {
+                        reject(err);
+                      } else {
+                        bot.send(message).then(resolve).catch(reject);
+                      }
+                    });
+                  }
                 });
               });
             },

@@ -48,6 +48,7 @@ module.exports = function(botkit) {
                             return {
                                 pattern: b.pattern,
                                 action: b.action,
+                                type: b.type,
                             }
                         }) : null,
                     }
@@ -459,17 +460,39 @@ module.exports = function(botkit) {
 
                               // test all the patterns
                               var triggered = 0;
-                              async.each(possible_actions, function(pattern, next) {
-                                  var test = new RegExp(pattern.pattern, 'i');
-                                  if (triggered == 0 && that.context.incoming_message.text.match(test)) {
-                                      console.log('💡 > ', that.context.incoming_message.text, '==', pattern.pattern,pattern.action);
-                                      triggered++;
-                                      that.takeAction(pattern).then(function() {
-                                          next();
-                                      });
+                              async.eachSeries(possible_actions, function(pattern, next) {
+                                async.eachSeries(botkit.ears, function(test, next_test) {
+                                  if (triggered == 0) {
+                                      test(pattern, that.context.incoming_message).then(function(match) {
+                                        if (match) {
+                                          triggered++;
+                                          that.takeAction(pattern).then(function() {
+                                            next_test();
+                                          });
+                                        } else {
+                                          next_test();
+                                        }
+                                      })
                                   } else {
-                                      next();
+                                    next_test();
                                   }
+                                  // var test = new RegExp(pattern.pattern, 'i');
+                                  // if (triggered == 0 && that.context.incoming_message.text.match(test)) {
+                                  //     console.log('💡 > ', that.context.incoming_message.text, '==', pattern.pattern,pattern.action);
+                                  //     triggered++;
+                                  //     that.takeAction(pattern).then(function() {
+                                  //         next();
+                                  //     });
+                                  // } else {
+                                  //     next();
+                                  // }
+                                  //
+                                  //
+                                  //
+                                  // next_test();
+                                }, function(err) {
+                                  next(err);
+                                });
                               }, function() {
                                   if (triggered == 0 && default_action.length) {
                                       that.takeAction(default_action[0]).then(function() {

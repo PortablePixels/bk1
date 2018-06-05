@@ -22,7 +22,7 @@ module.exports = function(botkit) {
           try {
               harness.register(plugin.name, plugin);
           } catch(err) {
-              console.log('SHIT ERROR IN REGISTER', err);
+              console.log('ERROR IN REGISTER', err);
           }
         },
         register: function(name, endpoints) {

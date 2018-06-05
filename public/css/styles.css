@@ -35,6 +35,9 @@ input[type="search"],
 input[type="password"] {
   width: 100%; }
 
+p {
+  margin-top: 0; }
+
 .breadcrumbs {
   font-size: 0.8rem;
   margin-bottom: 0.5rem; }
@@ -75,7 +78,8 @@ input[type="password"] {
 nav {
   flex-shrink: 0;
   flex-grow: 0;
-  background-color: #333; }
+  background-color: #333;
+  overflow-y: auto; }
 
 nav ul {
   list-style-type: none;
@@ -163,6 +167,9 @@ table.cells tr.header {
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   position: relative; }
+  .toolbar.bottom {
+    border-bottom: 1px solid #CCC;
+    margin-top: 1rem; }
   .toolbar ul {
     list-style-type: none;
     margin: 0;
@@ -199,7 +206,11 @@ table.cells tr.header {
 .workspace {
   display: flex;
   flex-direction: column;
-  height: 100%; }
+  position: absolute;
+  top: 0;
+  left: 80px;
+  right: 0;
+  bottom: 0; }
   .workspace > header {
     flex: 0;
     padding: 0.75rem; }
@@ -222,7 +233,9 @@ table.cells tr.header {
       padding: 0.75rem; }
 
 .dialog_navigator {
-  flex: 0 1 300px; }
+  flex: 0 1 300px;
+  height: 100%;
+  overflow-y: auto; }
   @media all and (max-width: 1000px) {
     .dialog_navigator {
       display: none; } }
@@ -245,13 +258,15 @@ table.cells tr.header {
 .dialog_view {
   flex: 1;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  height: 100%; }
   .dialog_view header {
     flex: 0;
     padding: 0.75rem;
     border-bottom: 1px solid #CCC; }
   .dialog_view .message_list {
-    flex: 1; }
+    flex: 1;
+    overflow-y: auto; }
   .dialog_view .composer {
     flex: 0;
     height: 60px;
@@ -271,7 +286,7 @@ table.cells tr.header {
   border-left: 10px solid transparent;
   padding-left: 1rem; }
   .message_list .line:hover {
-    border-left: 10px solid #000; }
+    border-left: 10px solid #DDD; }
 .message_list .addMessageWidget {
   border-top: 1px dashed #CCC;
   margin-top: 1rem;
@@ -284,14 +299,17 @@ table.cells tr.header {
 .message_list .message .text {
   padding: 0.5rem;
   border-radius: 20px;
-  max-width: 60%; }
+  max-width: 60%;
+  border-bottom-left-radius: 0;
+  border: 1px solid #CCC;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25); }
 .message_list .message:after {
   content: ' ';
   display: block;
   clear: both; }
 .message_list .fromBot .text {
   float: left;
-  background: #CCC; }
+  background: #F1F0F0; }
 .message_list .fromUser .text {
   float: right;
   background: blue;
@@ -322,18 +340,19 @@ table.cells tr.header {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(70, 130, 180, 0.75);
     z-index: 1000; }
   .dialog_overlay .dialog {
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: 5%;
+    transform: translate(-50%, 0%);
     left: 50%;
     max-height: 90%;
     overflow: hidden;
     max-width: 1000px;
     width: 80%;
-    min-width: 320px;
+    min-width: 600px;
+    border-radius: 8px;
     background: #FFF;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
     display: flex;
@@ -341,24 +360,130 @@ table.cells tr.header {
     overflow: hidden; }
     .dialog_overlay .dialog header {
       border-bottom: 1px solid #CCC;
-      padding: 0.75rem; }
+      padding: 1rem 2rem 1rem;
+      position: relative; }
+      .dialog_overlay .dialog header .right {
+        position: absolute;
+        top: 1rem;
+        right: 2rem; }
+      .dialog_overlay .dialog header h1 {
+        font-size: 0.8rem;
+        margin: 0; }
     .dialog_overlay .dialog footer {
       border-top: 1px solid #CCC;
-      padding: 0.75rem;
+      padding: 1rem 2rem;
       background: #333; }
     .dialog_overlay .dialog section {
       display: block;
       flex: 1;
       flex-basis: auto;
       overflow-y: auto; }
+      .dialog_overlay .dialog section h2 {
+        border-bottom: 1px solid #CCC; }
       .dialog_overlay .dialog section.pane {
-        padding: 0.75rem;
-        border-bottom: 0;
+        padding: 1rem 2rem;
+        border: 0;
         margin-bottom: 0; }
 
 .message_detail textarea {
   height: 100px;
   font-size: 1.5rem;
   line-height: 125%; }
+
+.summary {
+  padding-top: 0.5rem; }
+
+.paths {
+  border-left: 2px solid #CCC;
+  margin-top: -4px;
+  margin-left: 00.75rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem; }
+  .paths:after {
+    content: "";
+    display: table;
+    clear: both; }
+  .paths .message_option {
+    margin-bottom: 0.5rem; }
+  .paths .message_option:before {
+    content: 'if';
+    display: block;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 1.45em;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #CCC;
+    position: absolute;
+    left: -1.55rem;
+    top: 0.4rem; }
+
+.message_option {
+  line-height: 2rem;
+  width: auto;
+  display: block;
+  clear: both;
+  position: relative; }
+  .message_option.next .action, .message_option.repeat .action, .message_option.wait .action, .message_option.complete .action, .message_option.stop .action, .message_option.timeout .action {
+    padding-right: 1rem; }
+  .message_option.capture {
+    margin-bottom: 0; }
+  .message_option.else {
+    margin-left: 2.5rem;
+    margin-top: -1rem; }
+    .message_option.else:before {
+      content: 'else';
+      width: 35px;
+      border-radius: 25px;
+      left: -2.25rem;
+      display: block;
+      font-size: 14px;
+      height: 20px;
+      line-height: 1.45em;
+      text-align: center;
+      background-color: #CCC;
+      position: absolute;
+      top: 0.4rem; }
+  .message_option .utterance {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: #0077e5;
+    color: #FFF;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .message_option .warning {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: #FFFFCC;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .message_option .action {
+    padding: 0.25rem 0.5rem;
+    padding-right: 0;
+    border-radius: 20px;
+    background: #ccc;
+    white-space: nowrap; }
+  .message_option .variable {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    white-space: nowrap;
+    font-size: 20px; }
+  .message_option .branch-title {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: #b0f0ab;
+    cursor: pointer;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+    .message_option .branch-title:hover {
+      text-decoration: underline; }
 
 /*# sourceMappingURL=styles.css.map */

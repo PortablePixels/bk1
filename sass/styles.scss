@@ -1,3 +1,4 @@
+
 $nav-background: #333;
 $nav-color: #FFF;
 $link: blue;
@@ -9,10 +10,24 @@ $table-highlight: #F0F0F0;
 $table-highlight-selected: #FFFF99;
 $table-selected: #ffffCC;
 $horizontal-padding: 0.75rem;
+$dialog-padding: 1rem 2rem;
+$dialog-header-padding: 1rem 2rem 1rem;
+
 $toolbar-highlight: #DDD;
 $button-padding: 0.5rem 1rem;
 $button-active-background: hotpink;
 $button-active-color: #fff;
+
+$purple: #a795ef;
+$green: #b0f0ab;
+$blue: #283ed8;
+$lavender: #bcc4f1;
+$seafoam: #cff4ed;
+$cantaloupe: #eabd91; // $red: #dd99be;
+$white: #FFF;
+$pink: #D8117D;
+
+$path-color: #CCC;
 
 $dialog-footer-background: #333;
 
@@ -20,6 +35,15 @@ $message-action: purple;
 
 $variable-background: #d6edf7;
 $variable-color: #000;
+
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 
 /* shared botkit ui styles */
 * {
@@ -67,6 +91,9 @@ input[type="password"]
   width: 100%;
 }
 
+p {
+  margin-top: 0;
+}
 
 
 .breadcrumbs {
@@ -128,6 +155,7 @@ nav {
     flex-shrink: 0;
     flex-grow: 0;
     background-color: $nav-background;
+    overflow-y: auto;
 }
 
 nav ul {
@@ -246,6 +274,11 @@ table.cells tr.header {
     border-right: 1px solid $divider;
     position: relative;
 
+    &.bottom {
+      border-bottom: 1px solid $divider;
+      margin-top: 1rem;
+    }
+
     ul {
         list-style-type: none;
         margin: 0;
@@ -306,7 +339,11 @@ table.cells tr.header {
 .workspace {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 80px;
+  right: 0;
+  bottom: 0;
 
   & > header {
     flex: 0;
@@ -349,6 +386,8 @@ table.cells tr.header {
     }
 
     flex: 0 1 300px;
+    height: 100%;
+    overflow-y: auto;
 
     form {
       input[type="search"] {
@@ -387,6 +426,8 @@ table.cells tr.header {
   display: flex;
   flex-direction: column;
 
+  height: 100%;
+
   header {
     flex: 0;
     padding: $horizontal-padding;
@@ -395,6 +436,8 @@ table.cells tr.header {
 
   .message_list {
     flex: 1;
+    overflow-y: auto;
+
   }
   .composer {
     flex: 0;
@@ -437,7 +480,7 @@ table.cells tr.header {
     }
 
     &:hover {
-      border-left: 10px solid #000;
+      border-left: 10px solid $toolbar-highlight;
     }
   }
 
@@ -460,6 +503,9 @@ table.cells tr.header {
       padding: 0.5rem;
       border-radius: 20px;
       max-width: 60%;
+      border-bottom-left-radius: 0;
+      border: 1px solid $divider;
+      box-shadow: 1px 1px 1px rgba(0,0,0,0.25);
     }
   }
   .message:after {
@@ -471,7 +517,7 @@ table.cells tr.header {
   .fromBot {
     .text {
       float: left;
-      background: #CCC;
+      background: #F1F0F0;
     }
   }
 
@@ -518,14 +564,16 @@ table.cells tr.header {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(steelblue,0.75);
       z-index: 1000;
     }
 
     .dialog {
       position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      // top: 50%;
+      // transform: translate(-50%, -50%);
+      top: 5%;
+      transform: translate(-50%, 0%);
       left: 50%;
 
       max-height: 90%;
@@ -533,8 +581,9 @@ table.cells tr.header {
 
       max-width: 1000px;
       width: 80%;
-      min-width: 320px;
+      min-width: 600px;
       // margin: 0px auto;
+      border-radius: 8px;
 
       background: #FFF;
       box-shadow: 0 10px 20px rgba(0,0,0,0.25);
@@ -545,12 +594,26 @@ table.cells tr.header {
 
         header {
           border-bottom: 1px solid $divider;
-          padding: $horizontal-padding;
+          padding: $dialog-header-padding;
+
+          position: relative;
+
+          .right {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+          }
+
+          h1 {
+            font-size: 0.8rem;
+            margin: 0;
+          }
+
         }
 
         footer {
           border-top: 1px solid $divider;
-          padding: $horizontal-padding;
+          padding: $dialog-padding;
           background: $dialog-footer-background;
         }
 
@@ -561,9 +624,13 @@ table.cells tr.header {
 
           overflow-y: auto;
 
+          h2 {
+            border-bottom: 1px solid $divider;
+          }
+
           &.pane {
-            padding: $horizontal-padding;
-            border-bottom: 0;
+            padding: $dialog-padding;
+            border: 0;
             margin-bottom: 0;
           }
         }
@@ -581,4 +648,145 @@ table.cells tr.header {
     line-height: 125%;
   }
 
+}
+
+.summary {
+  padding-top: 0.5rem;
+}
+
+.paths {
+  @include clearfix;
+
+
+
+  border-left: 2px solid $path-color;
+  margin-top: -4px;
+  margin-left: 00.75rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  .message_option {
+    margin-bottom:0.5rem;
+  }
+
+  .message_option:before {
+    content: 'if';
+    display: block;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 1.45em;
+    text-align: center;
+    border-radius: 50%;
+    background-color: $path-color;
+    position: absolute;
+    left: -1.55rem;
+    top: 0.4rem;
+  }
+
+
+}
+
+
+.message_option {
+
+    // background: #F0F0F0;
+    // margin: 0.6rem auto;
+    line-height:2rem;
+    width: auto;
+    display: block;
+    // text-align: center;
+    // float: left;
+    clear: both;
+    position: relative;
+
+    &.next,
+    &.repeat,
+    &.wait,
+    &.complete,
+    &.stop,
+    &.timeout {
+
+        .action {
+            padding-right: 1rem;
+        }
+    }
+
+    &.capture {
+      margin-bottom: 0;
+    }
+
+    &.else {
+      margin-left: 2.5rem;
+      margin-top: -1rem;
+
+      &:before {
+        content: 'else';
+        width: 35px;
+        border-radius: 25px;
+        left: -2.25rem;
+
+        display: block;
+        font-size: 14px;
+        height: 20px;
+        line-height: 1.45em;
+        text-align: center;
+        background-color: $path-color;
+        position: absolute;
+        top: 0.4rem;
+      }
+    }
+
+    .utterance {
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        background: #0077e5;
+        color: #FFF;
+        white-space: nowrap;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+    }
+
+    .warning {
+      padding: 0.25rem 1rem;
+      border-radius: 20px;
+      background: #FFFFCC;
+      white-space: nowrap;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .action {
+        padding: 0.25rem 0.5rem;
+        padding-right: 0;
+        border-radius: 20px;
+        background: #ccc;
+        white-space: nowrap;
+    }
+
+    .variable {
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        white-space: nowrap;
+        font-size: 20px;
+    }
+
+    .branch-title {
+        padding: 0.25rem 1rem;
+        border-radius: 20px;
+        background: $green;
+        cursor: pointer;
+        white-space: nowrap;
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

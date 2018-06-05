@@ -45,6 +45,7 @@ built-in plugins:
 
 ## todos:
 
+* consider how the order of loading plugins makes a difference. "installed" plugins not loaded til boot is called, but local custom plugins would probably be loaded BEFORE them... pros and cons! could they all be put into a list and sorted by the UI? 
 * shouldEvaluate should be `bot instance specific` because different platforms have different event types - and considering for top level hearing is different than being included in a conversation. ie in slack hearing ambient after it is already active
 * need a middleware endpoint that gets the _raw_ message before ingesting as well as the _delivered_ message sent to platform
 * expose a function from webserver that lets you add static routes from plugins without including express in plugin

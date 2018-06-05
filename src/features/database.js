@@ -5,6 +5,10 @@ var debug = require('debug')('botkit:db');
 
 module.exports = function(botkit) {
 
+  if (!process.env.MONGO_URI) {
+    throw new Error('Please specify a valid MONGO_URI in this applications .env');
+  }
+
   mongoose.connect(process.env.MONGO_URI, {
   });
 

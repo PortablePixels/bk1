@@ -12,9 +12,13 @@ module.exports = function(botkit) {
 
         // pipeline
         ingest: ware(),
+        normalize: ware(),
+        categorize: ware(),
+        receive: ware(),
         understand: ware(),
 
         // outbound
+        format: ware(),
         send: ware(),
 
 
@@ -29,94 +33,111 @@ module.exports = function(botkit) {
             var message = clone(payload);
 
             if (!message.type) {
-              message.type = 'message';
+                message.type = 'message';
             }
 
             botkit.middleware.ingest.run(bot, message, function(err, bot, message) {
                 if (err) {
-                  return reject(err);
+                    return reject(err);
                 }
-                resolve(message);
+                botkit.middleware.normalize.run(bot, message, function(err, bot, message) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    botkit.middleware.categorize.run(bot, message, function(err, bot, message) {
+                        if (err) {
+                            return reject(err);
+                        }
+                        botkit.middleware.receive.run(bot, message, function(err, bot, message) {
+                            if (err) {
+                                return reject(err);
+                            }
+
+                            resolve(message);
+                        });
+                    });
+                });
             });
-      });
+        });
     }
 
 
     botkit.understand = function(bot, message) {
-      var response = {};
-      return new Promise(function(resolve, reject) {
-          if (!botkit.shouldEvaluate(message.type)) {
-            botkit.trigger(message.type, [bot, message]);
-          } else {
-            botkit.middleware.understand.run(bot, message, response, function(err, bot, message, response) {
-                if (err) {
-                  console.error('Rejecting after understand', err);
-                  return reject(err);
-                }
+        var response = {};
+        return new Promise(function(resolve, reject) {
+            if (!botkit.shouldEvaluate(message.type)) {
                 botkit.trigger(message.type, [bot, message]);
+            } else {
+                botkit.middleware.understand.run(bot, message, response, function(err, bot, message, response) {
+                    if (err) {
+                        console.error('Rejecting after understand', err);
+                        return reject(err);
+                    }
+                    botkit.trigger(message.type, [bot, message]);
 
-                resolve(response);
-            });
-          }
+                    resolve(response);
+                });
+            }
         });
     }
 
 
     // choose randomly from message text variants
     botkit.middleware.send.use(function(bot, message, next) {
-      if (Array.isArray(message.text)) {
-        message.text = message.text[Math.floor(Math.random()*message.text.length)];
-      }
-      next();
+        if (Array.isArray(message.text)) {
+            message.text = message.text[Math.floor(Math.random() * message.text.length)];
+        }
+        next();
     });
 
 
     // copy in custom fields
     botkit.middleware.send.use(function(bot, message, next) {
-      if (message.meta && message.meta.length) {
-        for (var m = 0; m < message.meta.length; m++) {
-          message[message.meta[m].key] = message.meta[m].value;
+        if (message.meta && message.meta.length) {
+            for (var m = 0; m < message.meta.length; m++) {
+                message[message.meta[m].key] = message.meta[m].value;
+            }
         }
-      }
 
-      // remove unnecessary fields
-      delete(message.meta);
+        // remove unnecessary fields
+        delete(message.meta);
 
-      next();
+        next();
     });
 
 
     // copy in platform specific fields
     botkit.middleware.send.use(function(bot, message, next) {
-      if (message.platforms && message.platforms[bot.type]) {
-        for (var key in message.platforms[bot.type]) {
-          message[key] = message.platforms[bot.type][key];
+        if (message.platforms && message.platforms[bot.type]) {
+            for (var key in message.platforms[bot.type]) {
+                message[key] = message.platforms[bot.type][key];
+            }
         }
-      }
 
-      // remove unnecessary fields
-      delete(message.platforms);
-      next();
+        // remove unnecessary fields
+        delete(message.platforms);
+        next();
     });
-
-
 
 
     botkit.middleware.beforeScript.use(function(convo, next) {
-      debug('BEFORE ', convo.script.command);
-      next();
+        debug('BEFORE ', convo.script.command);
+        next();
     });
+
     botkit.middleware.beforeThread.use(function(convo, new_thread, next) {
-      debug('BEFORE THREAD ', convo.script.command, new_thread);
-      next();
+        debug('BEFORE THREAD ', convo.script.command, new_thread);
+        next();
     });
 
     botkit.middleware.onChange.use(function(convo, key, val, next) {
-      debug('CHANGED VALUE ', convo.script.command, key, val);
-      next();
+        debug('CHANGED VALUE ', convo.script.command, key, val);
+        next();
     });
+
     botkit.middleware.afterScript.use(function(convo, next) {
-      debug('AFTER', convo.script.command);
-      next();
+        debug('AFTER', convo.script.command);
+        next();
     });
+
 }

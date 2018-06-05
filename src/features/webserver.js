@@ -37,7 +37,6 @@ module.exports = function(botkit) {
 
     webserver.use(function(req, res, next) {
       if (req.url.match(/\/admin\//)) {
-        console.log('HEY REQUIRING AUTH');
         authFunction(req, res, next);
       } else {
         next();
