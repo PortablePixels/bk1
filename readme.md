@@ -1,51 +1,10 @@
-# ENTERPRISE BOT SERVICE
+# BK 1.0
 
-What is the lightest possible botkit studio client
+Completely rebuilt from the ground up to ease development of conversational software on any platform.
 
-very limited need to access lower level conversation build
-  -> initiate a conversation/message with someone else
-  -> single reply
+## Open Issues:
 
-run through studio as only behavior
-
-persistent
-
-fast
-
-----
-
-## core features
-
-* web server
-* message ingestion
-* script walking
-* trigger handling
-* state management
-* database access
-* template handling
-
-built-in plugins:
-
-* persistence of user values/user list view
-* plugin for console/transcripts
-* web connector?
-* console connector?
-
-## plugin features
-
-* platform adapter
-    * slack
-
-* platform APIs
-* plugin for editor ui
-* plugin for nlp
-
-
-----
-
-## todos:
-
-* consider how the order of loading plugins makes a difference. "installed" plugins not loaded til boot is called, but local custom plugins would probably be loaded BEFORE them... pros and cons! could they all be put into a list and sorted by the UI? 
+* consider how the order of loading plugins makes a difference. "installed" plugins not loaded til boot is called, but local custom plugins would probably be loaded BEFORE them... pros and cons! could they all be put into a list and sorted by the UI?
 * shouldEvaluate should be `bot instance specific` because different platforms have different event types - and considering for top level hearing is different than being included in a conversation. ie in slack hearing ambient after it is already active
-* need a middleware endpoint that gets the _raw_ message before ingesting as well as the _delivered_ message sent to platform
 * expose a function from webserver that lets you add static routes from plugins without including express in plugin
+* expose a function for determining a plugin's relative path for loading views or other local assets without loading path in every module
