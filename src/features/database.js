@@ -9,6 +9,8 @@ module.exports = function(botkit) {
     throw new Error('Please specify a valid MONGO_URI in this applications .env');
   }
 
+  // TODO: a password with an unescaped char causes an unhandled rejection somewhere in here!
+  
   mongoose.connect(process.env.MONGO_URI, {
   });
 

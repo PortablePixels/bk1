@@ -92,7 +92,7 @@ module.exports = function(botkit) {
 
 
     // copy in custom fields
-    botkit.middleware.send.use(function(bot, message, next) {
+    botkit.middleware.format.use(function(bot, message, next) {
         if (message.meta && message.meta.length) {
             for (var m = 0; m < message.meta.length; m++) {
                 message[message.meta[m].key] = message.meta[m].value;

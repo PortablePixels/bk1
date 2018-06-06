@@ -8,3 +8,4 @@ Completely rebuilt from the ground up to ease development of conversational soft
 * shouldEvaluate should be `bot instance specific` because different platforms have different event types - and considering for top level hearing is different than being included in a conversation. ie in slack hearing ambient after it is already active
 * expose a function from webserver that lets you add static routes from plugins without including express in plugin
 * expose a function for determining a plugin's relative path for loading views or other local assets without loading path in every module
+* think about what happens if a persisted convo gets auto-closed or overwritten.  is there a timeout? is there an end event?

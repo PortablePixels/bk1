@@ -222,6 +222,11 @@ module.exports = function(botkit) {
                       var reply = that.processTemplate(template);
                       reply.to = that.context.user;
 
+                      // generate a message id that identifies this message
+                      // TODO: make sure this field name doesn't cause issues.
+                      // TODO: consider: $fields get pruned before sending?
+                      reply.$mid = that.script.command + '-' + that.state.thread + '-' + that.state.cursor;
+
                       // send only if it has some real payload
                       // TODO: there should be a better way to indicate messages not to send
                       if (reply.text || reply.quick_replies || reply.platforms || reply.attachments || reply.attachment) {
