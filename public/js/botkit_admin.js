@@ -5,7 +5,7 @@ app.config(function($interpolateProvider) {
     $interpolateProvider.endSymbol('%}');
 });
 
-app.controller('app', ['$scope', '$http', '$location', function($scope, $http, $location) {
+app.controller('app', ['$scope', '$http', '$location', '$sce', function($scope, $http, $location, $sce) {
 
   console.log('Booted Botkit Admin app');
   $scope.ui = {};
@@ -22,6 +22,10 @@ app.controller('app', ['$scope', '$http', '$location', function($scope, $http, $
     $scope.ui.dialog_open = false;
   }
 
+  $scope.asHTML = function(el) {
+    console.log("TRUST THIS", el);
+    return $sce.trustAsHtml(el);
+  }
 
   $scope.select = function(item, list) {
       item.$$selected = !item.$$selected;

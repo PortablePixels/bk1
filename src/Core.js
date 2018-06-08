@@ -130,6 +130,9 @@ module.exports = function(config) {
       // add ability to "hear" simple triggers in message events
       require(__dirname + '/features/understand_hearing.js')(botkit);
 
+      // add ability to take developer-defined actions
+      require(__dirname + '/features/actions.js')(botkit);
+
       // add ability to "hear" simple triggers in message events
       // require(__dirname + '/features/understand_remote_triggers.js')(botkit);
 

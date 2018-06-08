@@ -45,11 +45,7 @@ module.exports = function(botkit) {
                     message.collect = {
                         key: message.key,
                         options: message.branches ? message.branches.map(function(b) {
-                            return {
-                                pattern: b.pattern,
-                                action: b.action,
-                                type: b.type,
-                            }
+                            return b;
                         }) : null,
                     }
 
@@ -359,6 +355,8 @@ module.exports = function(botkit) {
 
                       botkit.middleware.afterScript.run(that, function(err, that) {
 
+                      that.context.transition_from = that.script.command;
+
                       // reset script and state
                       that.state.cursor = 0;
                       that.state.thread = 'default';
@@ -405,10 +403,15 @@ module.exports = function(botkit) {
                         resolve();
                         break;
                     case 'execute_script':
+                        console.log('gonna execute a script', message, message.execute);
                         that.executeScript(message.execute).then(resolve).catch(reject);
                         break;
                     default:
+                      if (botkit.hasPluginAction(message.action)) {
+                        botkit.handlePluginAction(message.action, that, message).then(resolve).catch(reject);
+                      } else {
                         that.gotoThread(message.action).then(resolve).catch(reject);
+                      }
                 }
             });
         }
@@ -473,7 +476,7 @@ module.exports = function(botkit) {
                                           triggered++;
                                           that.takeAction(pattern).then(function() {
                                             next_test();
-                                          });
+                                          }).catch(next_test);
                                         } else {
                                           next_test();
                                         }
@@ -502,7 +505,7 @@ module.exports = function(botkit) {
                                   if (triggered == 0 && default_action.length) {
                                       that.takeAction(default_action[0]).then(function() {
                                           resolve();
-                                      });
+                                      }).catch(reject);
                                   } else {
                                       resolve();
                                   }
