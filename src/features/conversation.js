@@ -355,7 +355,7 @@ module.exports = function(botkit) {
 
                       botkit.middleware.afterScript.run(that, function(err, that) {
 
-                      that.context.transition_from = that.script.command;
+                      that.state.transition_from = that.script.command;
 
                       // reset script and state
                       that.state.cursor = 0;
