@@ -11,4 +11,3 @@ Completely rebuilt from the ground up to ease development of conversational soft
 * expose a function for determining a plugin's relative path for loading views or other local assets without loading path in every module
 * think about what happens if a persisted convo gets auto-closed or overwritten.  is there a timeout? is there an end event?
 * how to stash info about a user OUTSIDE of a convo like in a middleware or event handler
-* would be cool to have a way to do like convo.continueWith('script') that would do the same copying of values as execute_script does

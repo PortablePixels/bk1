@@ -361,7 +361,7 @@ module.exports = function(botkit) {
                       that.state.cursor = 0;
                       that.state.thread = 'default';
                       that.ingestScript(script).then(function() {
-                        if (options.thread) {
+                        if (options.thread && options.thread != 'default') {
                           that.kickoff(true).then(function() { that.gotoThread(options.thread).then(resolve).catch(reject) }).catch(reject);
                         } else {
                           // call any before things
