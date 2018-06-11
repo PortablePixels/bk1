@@ -9,7 +9,7 @@ module.exports = function(botkit) {
             url: '/',
             method: 'get',
             handler: function(req, res) {
-                var relativePath = path.relative(process.cwd() + '/views', __dirname + '/views');
+              var relativePath = path.relative(botkit.LIB_PATH + '/../views', __dirname + '/views');
                 res.render(relativePath + '/main');
             }
         }],
