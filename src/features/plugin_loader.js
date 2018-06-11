@@ -69,7 +69,6 @@ module.exports = function(botkit) {
               try {
                   endpoints.init(botkit);
               } catch(err) {
-                  console.log('CAT H ERRORRERER');
                   if (err) {
                       throw new Error(err);
                   }

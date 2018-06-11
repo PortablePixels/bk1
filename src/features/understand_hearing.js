@@ -68,7 +68,6 @@ module.exports = function(botkit) {
     botkit.addEars(function(trigger, message) {
         return new Promise(function(resolve, reject) {
 
-            console.log('TEST STRING', trigger, message);
 
             if (!message.text) {
                 resolve(false);
@@ -130,7 +129,6 @@ module.exports = function(botkit) {
                 return reject(err);
             }
 
-            console.log('testing regex', test, message.text);
 
             if (message && message.text.match(test)) {
 
@@ -162,7 +160,6 @@ module.exports = function(botkit) {
             async.eachSeries(triggers, function(trigger, next_trigger) {
                 // use various ways to hear stuff
                 async.eachSeries(botkit.ears, function(test, next_test) {
-                    // console.log('TEST', trigger, test);
                     if (triggered == 0) {
                         test(trigger.pattern, message).then(function(match) {
                             if (match) {
