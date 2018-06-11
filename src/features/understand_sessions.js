@@ -41,6 +41,7 @@ module.exports = function(botkit) {
 
     botkit.endSession = function(convo) {
       return new Promise(function(resolve, reject) {
+        console.log('remove a session', convo.context.user, convo.context.channel);
         botkit.db.sessions.remove({
             user: convo.context.user,
             channel: convo.context.channel
