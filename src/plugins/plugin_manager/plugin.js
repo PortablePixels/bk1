@@ -1,7 +1,6 @@
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
-var WebSocket = require('ws');
 var request = require('request');
 const exec = require('child_process').exec;
 var async = require('async');
