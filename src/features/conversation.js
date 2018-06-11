@@ -407,6 +407,7 @@ module.exports = function(botkit) {
         this.takeAction = function(message) {
             var that = this;
             return new Promise(function(resolve, reject) {
+                console.log('LETS TAKE AN ACTION', message.action);
                 switch (message.action) {
                     case 'repeat':
                         that.repeat();
