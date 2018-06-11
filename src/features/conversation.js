@@ -297,6 +297,7 @@ module.exports = function(botkit) {
                                 });
                             } else if (reply.action) {
                                 // take an action baby
+                                console.log('FOUND ACTION ASSOCIATED WITH MESSAGE!!!');
                                 if (reply.condition) {
                                   console.log('hey i found a condition to test', reply.condition);
                                   botkit.testCondition(that.processTemplate(clone(reply.condition))).then(function(passed) {
@@ -305,10 +306,12 @@ module.exports = function(botkit) {
                                           that.walkScript().then(resolve).catch(reject);
                                       }).catch(reject);
                                     } else {
+                                      console.log('DID NOT TAKE ACTION DUE TO FAILED CONDITIONAL');
                                       that.walkScript().then(resolve).catch(reject);
                                     }
                                   }).catch(reject);
                                 } else {
+                                  console.log('TAKING ACTION UNCONDITIONALLY!');
                                   that.takeAction(reply).then(function() {
                                       that.walkScript().then(resolve).catch(reject);
                                   }).catch(reject);
