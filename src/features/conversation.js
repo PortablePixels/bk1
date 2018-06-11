@@ -114,7 +114,7 @@ module.exports = function(botkit) {
             }
 
             console.log('MOVING ON');
-
+            console.log('STORING CONVERSATION STATE ingest');
             botkit.storeConversationState(that).then(resolve).catch(reject);
           });
 
@@ -292,6 +292,7 @@ module.exports = function(botkit) {
                             that.replies.push(that.processTemplate(reply));
                             // pause for response
                             if (reply.collect) {
+                                console.log('STORING CONVERSATION STATE collect');
                                 botkit.storeConversationState(that).then(function() {
                                   resolve(that.replies);
                                 });
@@ -325,6 +326,7 @@ module.exports = function(botkit) {
                               if (err) {
                                 reject(err);
                               } else {
+                                console.log('CLEARING UP SESSION!!');
                                 botkit.endSession(that).then(function() {
                                   resolve(that.replies);
                                 }).catch(function(err) {
