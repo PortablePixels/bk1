@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var WebSocket = require('ws');
 
 module.exports = function(botkit) {
 

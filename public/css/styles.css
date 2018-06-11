@@ -305,6 +305,8 @@ table.cells tr.header {
   background: #FFF;
   color: #000;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.25); }
+.message_list .message .message_action {
+  padding-left: 5px; }
 .message_list .message:after {
   content: ' ';
   display: block;
@@ -327,10 +329,12 @@ table.cells tr.header {
   .message_list .quick_reply:last-child {
     margin-right: 0; }
 
-.dialog_overlay {
+.dialog_overlay,
+.edit_dialog_overlay {
   display: none;
   padding: 1rem; }
-  .dialog_overlay.active {
+  .dialog_overlay.active,
+  .edit_dialog_overlay.active {
     display: block;
     position: fixed;
     top: 0;
@@ -339,7 +343,8 @@ table.cells tr.header {
     bottom: 0;
     background: rgba(70, 130, 180, 0.75);
     z-index: 1000; }
-  .dialog_overlay .dialog {
+  .dialog_overlay .dialog,
+  .edit_dialog_overlay .dialog {
     position: absolute;
     top: 5%;
     transform: translate(-50%, 0%);
@@ -355,29 +360,36 @@ table.cells tr.header {
     display: flex;
     flex-direction: column;
     overflow: hidden; }
-    .dialog_overlay .dialog header {
+    .dialog_overlay .dialog header,
+    .edit_dialog_overlay .dialog header {
       border-bottom: 1px solid #CCC;
       padding: 1rem 2rem 1rem;
       position: relative; }
-      .dialog_overlay .dialog header .right {
+      .dialog_overlay .dialog header .right,
+      .edit_dialog_overlay .dialog header .right {
         position: absolute;
         top: 1rem;
         right: 2rem; }
-      .dialog_overlay .dialog header h1 {
+      .dialog_overlay .dialog header h1,
+      .edit_dialog_overlay .dialog header h1 {
         font-size: 0.8rem;
         margin: 0; }
-    .dialog_overlay .dialog footer {
+    .dialog_overlay .dialog footer,
+    .edit_dialog_overlay .dialog footer {
       border-top: 1px solid #CCC;
       padding: 1rem 2rem;
       background: #333; }
-    .dialog_overlay .dialog section {
+    .dialog_overlay .dialog section,
+    .edit_dialog_overlay .dialog section {
       display: block;
       flex: 1;
       flex-basis: auto;
       overflow-y: auto; }
-      .dialog_overlay .dialog section h2 {
+      .dialog_overlay .dialog section h2,
+      .edit_dialog_overlay .dialog section h2 {
         border-bottom: 1px solid #CCC; }
-      .dialog_overlay .dialog section.pane {
+      .dialog_overlay .dialog section.pane,
+      .edit_dialog_overlay .dialog section.pane {
         padding: 1rem 2rem;
         border: 0;
         margin-bottom: 0; }
@@ -417,6 +429,41 @@ table.cells tr.header {
     left: -1.55rem;
     top: 0.4rem; }
 
+.test {
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  background: #CCC;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.utterance {
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  background: #0077e5;
+  color: #FFF;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+
+.condition {
+  display: block;
+  position: relative;
+  line-height: 2rem; }
+  .condition:before {
+    content: 'if';
+    display: inline-block;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 1.45em;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #CCC;
+    top: 0.4rem; }
+
 .message_option {
   line-height: 2rem;
   width: auto;
@@ -424,6 +471,18 @@ table.cells tr.header {
   clear: both;
   position: relative;
   color: #000; }
+  .message_option.with_condition {
+    margin-left: 1.5rem; }
+    .message_option.with_condition:before {
+      content: ' ';
+      display: block;
+      border-left: 2px solid #CCC;
+      border-bottom: 2px solid #CCC;
+      height: 25px;
+      width: 20px;
+      position: absolute;
+      left: -18px;
+      top: -10px; }
   .message_option.small {
     font-size: 0.8rem; }
   .message_option.big {
@@ -448,15 +507,6 @@ table.cells tr.header {
       background-color: #CCC;
       position: absolute;
       top: 0.4rem; }
-  .message_option .utterance {
-    padding: 0.25rem 1rem;
-    border-radius: 20px;
-    background: #0077e5;
-    color: #FFF;
-    white-space: nowrap;
-    max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis; }
   .message_option .warning {
     padding: 0.25rem 1rem;
     border-radius: 20px;
@@ -475,16 +525,19 @@ table.cells tr.header {
     padding: 0.25rem 1rem;
     border-radius: 20px;
     white-space: nowrap;
-    font-size: 20px; }
-  .message_option .branch-title {
+    font-size: 20px;
+    display: inline; }
+  .message_option .branch-title,
+  .message_option .parameter {
     padding: 0.25rem 1rem;
     border-radius: 20px;
     background: #b0f0ab;
-    cursor: pointer;
     white-space: nowrap;
     max-width: 150px;
     overflow: hidden;
     text-overflow: ellipsis; }
+  .message_option .branch-title {
+    cursor: pointer; }
     .message_option .branch-title:hover {
       text-decoration: underline; }
 

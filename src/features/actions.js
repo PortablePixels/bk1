@@ -1,11 +1,13 @@
+var clone = require('clone');
 module.exports = function(botkit) {
   botkit.actions = [];
 
-  botkit.addAction = function(type, description, template, handler) {
+  botkit.addAction = function(type, description, template, widget_url, handler) {
     botkit.actions.push({
       type: type,
       description: description,
       template: template,
+      widget_url: widget_url,
       handler: handler
     });
   }
@@ -21,7 +23,7 @@ module.exports = function(botkit) {
     return new Promise(function(resolve, reject) {
       var actions = botkit.actions.filter(function(a) { return a.type == type });
       if (actions.length) {
-          actions[0].handler(convo, message).then(resolve).catch(reject);
+          actions[0].handler(convo, convo.processTemplate(clone(message))).then(resolve).catch(reject);
       } else {
         resolve();
       }

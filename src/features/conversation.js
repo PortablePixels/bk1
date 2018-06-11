@@ -45,7 +45,16 @@ module.exports = function(botkit) {
                     message.collect = {
                         key: message.key,
                         options: message.branches ? message.branches.map(function(b) {
+
                             return b;
+                            // var option = {
+                            //   pattern: b.pattern,
+                            //   type: b.type,
+                            //   action: b.action,
+                            //   options: b.options,
+                            // }
+                            //
+                            // return option;
                         }) : null,
                     }
 
@@ -90,6 +99,7 @@ module.exports = function(botkit) {
 
           return new Promise(function(resolve, reject) {
 
+
             // TODO: Eventually this will switch and we will process v2 scripts by default
             if (script.version == 2) {
                 that.script = that.transformVersion2to1(script);
@@ -97,10 +107,13 @@ module.exports = function(botkit) {
                 that.script = script;
             }
 
+            console.log('INGESTED THIS FAR', that.script);
 
             for (var x = 0; x < that.script.script.length; x++) {
               that.threads[that.script.script[x].topic] = that.script.script[x].script;
             }
+
+            console.log('MOVING ON');
 
             botkit.storeConversationState(that).then(resolve).catch(reject);
           });
@@ -174,6 +187,7 @@ module.exports = function(botkit) {
           var vars = {
             vars: this.state.vars,
             user: this.state.user_vars,
+            state: this.state,
           }
 
           if (typeof(obj)=='string') {
@@ -209,13 +223,13 @@ module.exports = function(botkit) {
 
                   // queue up all the replies to be sent
                   for (var m = 0; m < next_messages.length; m++) {
-                      var template = next_messages[m];
+                      var reply = next_messages[m];
 
                       // make sure this is properly addressed
-                      template.channel = that.context.channel;
-                      template.user = that.context.user;
+                      reply.channel = that.context.channel;
+                      reply.user = that.context.user;
 
-                      var reply = that.processTemplate(template);
+//                      var reply = that.processTemplate(template);
                       reply.to = that.context.user;
 
                       // generate a message id that identifies this message
@@ -272,10 +286,10 @@ module.exports = function(botkit) {
                         }
 
                         if (that.status=='active' && that.state.cursor < thread.length) {
-                            var reply = thread[that.state.cursor];
+                            var reply = clone(thread[that.state.cursor]);
 
                             that.state.cursor++;
-                            that.replies.push(reply);
+                            that.replies.push(that.processTemplate(reply));
                             // pause for response
                             if (reply.collect) {
                                 botkit.storeConversationState(that).then(function() {
@@ -283,9 +297,22 @@ module.exports = function(botkit) {
                                 });
                             } else if (reply.action) {
                                 // take an action baby
-                                that.takeAction(reply).then(function() {
-                                    that.walkScript().then(resolve).catch(reject);
-                                }).catch(reject);
+                                if (reply.condition) {
+                                  console.log('hey i found a condition to test', reply.condition);
+                                  botkit.testCondition(that.processTemplate(clone(reply.condition))).then(function(passed) {
+                                    if (passed) {
+                                      that.takeAction(reply).then(function() {
+                                          that.walkScript().then(resolve).catch(reject);
+                                      }).catch(reject);
+                                    } else {
+                                      that.walkScript().then(resolve).catch(reject);
+                                    }
+                                  }).catch(reject);
+                                } else {
+                                  that.takeAction(reply).then(function() {
+                                      that.walkScript().then(resolve).catch(reject);
+                                  }).catch(reject);
+                                }
                             } else {
                                 that.walkScript().then(resolve).catch(reject);
                             }
@@ -352,8 +379,8 @@ module.exports = function(botkit) {
             return new Promise(function(resolve, reject) {
                 debug('SWITCHING SCRIPT FROM ', that.script.command,'TO',options.script);
                 botkit.api.getScript(options.script, that.context.user).then(function(script) {
-
                       botkit.middleware.afterScript.run(that, function(err, that) {
+
 
                       that.state.transition_from = that.script.command;
 
@@ -402,8 +429,9 @@ module.exports = function(botkit) {
                         that.stop('timeout');
                         resolve();
                         break;
+
+                    // TODO: this should be part of the external triggers feature
                     case 'execute_script':
-                        console.log('gonna execute a script', message, message.execute);
                         that.executeScript(message.execute).then(resolve).catch(reject);
                         break;
                     default:

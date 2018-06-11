@@ -6,7 +6,7 @@ module.exports = function(botkit) {
 
     botkit.triggers = {};
 
-    botkit.ears = [];
+    botkit.ears = {};
     botkit.earsList = [];
 
     botkit.hears = function(patterns, events, handler) {
@@ -37,7 +37,7 @@ module.exports = function(botkit) {
     }
 
     botkit.addEars = function(test_function, type, description) {
-        botkit.ears.push(test_function);
+        botkit.ears[type] = test_function;
         if (type && description) {
           botkit.earsList.push({
             type: type,
@@ -46,9 +46,29 @@ module.exports = function(botkit) {
         }
     }
 
+    botkit.testCondition = function(condition) {
+      return new Promise(function(resolve, reject) {
+        if (botkit.ears[condition.type]) {
+          botkit.ears[condition.type](
+            {
+              type: condition.type,
+              pattern: condition.right,
+            },
+            {
+              text: condition.left
+            }
+          ).then(resolve).catch(reject);
+        } else {
+          reject(new Error('Missing test type' +  condition.type));
+        }
+      });
+    }
+
     // do basic regular expression tests
     botkit.addEars(function(trigger, message) {
         return new Promise(function(resolve, reject) {
+
+            console.log('TEST STRING', trigger, message);
 
             if (!message.text) {
                 resolve(false);
@@ -109,6 +129,8 @@ module.exports = function(botkit) {
             } catch (err) {
                 return reject(err);
             }
+
+            console.log('testing regex', test, message.text);
 
             if (message && message.text.match(test)) {
 

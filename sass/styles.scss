@@ -509,6 +509,10 @@ table.cells tr.header {
       color: #000;
       box-shadow: 1px 1px 1px rgba(0,0,0,0.25);
     }
+
+    .message_action {
+      padding-left: 5px;
+    }
   }
   .message:after {
     content: ' ';
@@ -549,7 +553,8 @@ table.cells tr.header {
 }
 
 
-.dialog_overlay {
+.dialog_overlay,
+.edit_dialog_overlay {
     display: none;
     padding: 1rem;
 
@@ -684,6 +689,50 @@ table.cells tr.header {
 
 }
 
+.test {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: $divider;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.utterance {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: #0077e5;
+    color: #FFF;
+    white-space: nowrap;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+
+.condition {
+  display: block;
+  position: relative;
+  line-height:2rem;
+
+  &:before {
+    content: 'if';
+    display: inline-block;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    line-height: 1.45em;
+    text-align: center;
+    border-radius: 50%;
+    background-color: $path-color;
+    // position: absolute;
+    // left: -1.55rem;
+    top: 0.4rem;
+  }
+
+}
 
 .message_option {
 
@@ -697,6 +746,22 @@ table.cells tr.header {
     clear: both;
     position: relative;
     color: #000;
+
+    &.with_condition {
+      margin-left: 1.5rem;
+
+      &:before {
+        content: ' ';
+        display: block;
+        border-left: 2px solid $divider;
+        border-bottom: 2px solid $divider;
+        height: 25px;
+        width: 20px;
+        position: absolute;
+        left: -18px;
+        top: -10px;
+      }
+    }
 
     &.small {
       font-size: 0.8rem;
@@ -743,17 +808,7 @@ table.cells tr.header {
       }
     }
 
-    .utterance {
-        padding: 0.25rem 1rem;
-        border-radius: 20px;
-        background: #0077e5;
-        color: #FFF;
-        white-space: nowrap;
-        max-width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
 
-    }
 
     .warning {
       padding: 0.25rem 1rem;
@@ -778,21 +833,25 @@ table.cells tr.header {
         border-radius: 20px;
         white-space: nowrap;
         font-size: 20px;
+        display: inline;
     }
 
-    .branch-title {
+    .branch-title,
+    .parameter {
         padding: 0.25rem 1rem;
         border-radius: 20px;
         background: $green;
-        cursor: pointer;
         white-space: nowrap;
         max-width: 150px;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    .branch-title {
+      cursor: pointer;
 
-        &:hover {
-            text-decoration: underline;
-        }
+      &:hover {
+          text-decoration: underline;
+      }
     }
 }
 
