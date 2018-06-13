@@ -1,4 +1,4 @@
-var app = angular.module('botkit_admin', ['dndLists']);
+var app = angular.module('botkit_admin', ['dndLists','angular-clipboard']);
 
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{%');
@@ -10,6 +10,13 @@ app.controller('app', ['$scope', '$http', '$location', '$sce', function($scope, 
   console.log('Booted Botkit Admin app');
   $scope.ui = {};
 
+  $scope.goto = function(url) {
+    window.location = url;
+  }
+  
+  $scope.swallow = function($event) {
+    $event.stopPropagation();
+  }
   $scope.openDialog = function(template_path) {
     console.log('LOAD DIALOG', template_path);
     $scope.ui.dialog_template = template_path;
@@ -21,6 +28,45 @@ app.controller('app', ['$scope', '$http', '$location', '$sce', function($scope, 
     event.stopPropagation();
     $scope.ui.dialog_open = false;
   }
+
+  $scope.bigInput = function(title, placeholder, value, submit, error) {
+    $scope.ui.big = {
+      title: title,
+      placeholder: placeholder,
+      value: value, // should make a copy so doesn't update by references
+      submit: submit || 'Continue',
+      error: error,
+    }
+    $scope.openDialog('/partials/bigInput.html');
+    return new Promise(function(resolve, reject) {
+      $scope.bigInputSubmit = function() {
+        resolve($scope.ui.big.value);
+        $scope.ui.dialog_open = false;
+      }
+      $scope.bigInputCancel = function() {
+        $scope.ui.dialog_open = false;
+        reject();
+      }
+    });
+  }
+
+  $scope.confirm = function(title) {
+    $scope.ui.big = {
+      title: title,
+    }
+    $scope.openDialog('/partials/confirm.html');
+    return new Promise(function(resolve, reject) {
+      $scope.bigInputSubmit = function() {
+        resolve(true);
+        $scope.ui.dialog_open = false;
+      }
+      $scope.bigInputCancel = function() {
+        $scope.ui.dialog_open = false;
+        reject(false);
+      }
+    });
+  }
+
 
   $scope.asHTML = function(el) {
     console.log("TRUST THIS", el);

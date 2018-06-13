@@ -1,0 +1,15 @@
+<div class="dialog bigInput">
+  <header>
+    <h1 ng-if="ui.big.title">
+      {% ui.big.title %}
+    </h1>
+    <button ng-click="bigInputCancel()" class="x"><i class="fa fa-times" aria-hidden="true"></i></button>
+  </header>
+  <section class="pane">
+    <form ng-submit="bigInputSubmit()">
+      <div class="error" ng-if="ui.big.error">{% ui.big.error %}</div>
+      <input class="ng-class:{error: ui.big.error};" type="text" name="big" ng-model="ui.big.value" placeholder="{% ui.big.placeholder %}"  autocomplete="off" required>
+      <button type="submit" ng-disabled="!ui.big.value" class="big primary">{% ui.big.submit %}</button>
+    </form>
+  </section>
+</div>

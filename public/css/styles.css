@@ -51,7 +51,7 @@ p {
         color: #CCC;
         text-decoration: none; }
         .breadcrumbs ul li a:hover {
-          color: blue;
+          color: #283ed8;
           text-decoration: underline; }
       .breadcrumbs ul li:after {
         content: '/';
@@ -78,8 +78,9 @@ p {
 nav {
   flex-shrink: 0;
   flex-grow: 0;
-  background-color: #333;
-  overflow-y: auto; }
+  background-color: #F0F0F0;
+  overflow-y: auto;
+  width: 80px; }
 
 nav ul {
   list-style-type: none;
@@ -90,11 +91,13 @@ nav ul li a {
   display: block;
   text-decoration: none;
   font-size: 12px;
-  color: #FFF; }
+  color: #283ed8; }
 
 nav ul li .icon {
   font-size: 2rem;
   display: block; }
+  nav ul li .icon img {
+    max-width: 50%; }
 
 nav ul li {
   padding: 0.5rem;
@@ -102,7 +105,7 @@ nav ul li {
   margin-bottom: 0.5rem; }
 
 nav ul li:hover {
-  background-color: #4d4d4d;
+  background-color: white;
   border-radius: 4px; }
 
 .content_wrapper {
@@ -124,6 +127,14 @@ table.cells th {
 
 table.cells .right {
   text-align: right; }
+
+table.cells .ellipsis {
+  position: relative;
+  width: 20px; }
+  table.cells .ellipsis .ellipsis_menu {
+    position: relative;
+    top: 0;
+    right: 0; }
 
 table.cells td,
 table.cells th {
@@ -161,6 +172,32 @@ table.cells tr.header {
   color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
   z-index: 2; }
+
+button {
+  background: #DDD;
+  border: 0;
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  outline: none; }
+  button.primary {
+    background-color: #b0f0ab; }
+    button.primary:disabled {
+      color: #CCC;
+      background: #f7f7f7; }
+      button.primary:disabled:hover {
+        background: #f7f7f7; }
+  button.big {
+    font-size: 1.25rem; }
+  button:disabled {
+    color: #CCC; }
+    button:disabled:hover {
+      background: #f7f7f7; }
+  button:hover {
+    background: hotpink;
+    color: #fff; }
+  button:active {
+    background: hotpink;
+    color: #fff; }
 
 .toolbar {
   border-top: 1px solid #CCC;
@@ -224,9 +261,8 @@ table.cells tr.header {
     margin-bottom: 0;
     padding: 0; }
     .workspace .pane h2 {
-      border-bottom: 1px solid #CCC;
-      padding: 0.75rem;
-      margin: 0; }
+      margin: 0;
+      margin-bottom: 1rem; }
     .workspace .pane:last-child {
       border-right: 0; }
     .workspace .pane section {
@@ -245,15 +281,21 @@ table.cells tr.header {
     border-left: 0;
     border-right: 0;
     border-bottom: 1px solid #CCC; }
-  .dialog_navigator ul {
+  .dialog_navigator .threads ul {
     list-style-type: none;
     margin: 0;
     padding: 0; }
-    .dialog_navigator ul li {
-      list-style-type: disc;
-      list-style-position: inside; }
-      .dialog_navigator ul li.selected {
-        background: #F0F0F0; }
+    .dialog_navigator .threads ul li {
+      padding: 0.25rem 0.5rem;
+      position: relative; }
+      .dialog_navigator .threads ul li .ellipsis_menu {
+        display: none; }
+      .dialog_navigator .threads ul li.selected {
+        background: #bcc4f1; }
+        .dialog_navigator .threads ul li.selected .ellipsis_menu {
+          display: block;
+          top: 0.25rem;
+          right: 0.5rem; }
 
 .dialog_view {
   flex: 1;
@@ -284,7 +326,9 @@ table.cells tr.header {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   border-left: 10px solid transparent;
-  padding-left: 1rem; }
+  padding-left: 1rem;
+  padding-right: 1rem;
+  position: relative; }
   .message_list .line:hover {
     border-left: 10px solid #DDD; }
 .message_list .addMessageWidget {
@@ -362,9 +406,24 @@ table.cells tr.header {
     overflow: hidden; }
     .dialog_overlay .dialog header,
     .edit_dialog_overlay .dialog header {
-      border-bottom: 1px solid #CCC;
       padding: 1rem 2rem 1rem;
       position: relative; }
+      .dialog_overlay .dialog header .x,
+      .edit_dialog_overlay .dialog header .x {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top-left-radius: 0;
+        background: transparent; }
+        .dialog_overlay .dialog header .x:hover,
+        .edit_dialog_overlay .dialog header .x:hover {
+          background: #DDD; }
+        .dialog_overlay .dialog header .x:active,
+        .edit_dialog_overlay .dialog header .x:active {
+          background: hotpink;
+          color: #fff; }
       .dialog_overlay .dialog header .right,
       .edit_dialog_overlay .dialog header .right {
         position: absolute;
@@ -606,5 +665,58 @@ label.tag {
         .execute_script_widget .script_browser .script_results ul li {
           border-bottom: 1px solid #CCC;
           padding: 0.75rem; }
+
+.dialog_overlay .confirm {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  max-width: 600px; }
+  .dialog_overlay .confirm .pane {
+    text-align: center; }
+  .dialog_overlay .confirm label {
+    display: block;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1rem; }
+
+.dialog_overlay .bigInput label {
+  display: block;
+  font-weight: bold; }
+.dialog_overlay .bigInput input[type="text"] {
+  font-size: 1.5rem;
+  margin-bottom: 1rem; }
+  .dialog_overlay .bigInput input[type="text"].error {
+    border: 1px solid #dd3333; }
+.dialog_overlay .bigInput .error {
+  font-weight: normal;
+  color: #dd3333; }
+
+.ellipsis_menu {
+  position: absolute;
+  right: 1rem;
+  top: 1rem; }
+  .ellipsis_menu ul {
+    display: none; }
+  .ellipsis_menu:after {
+    content: '\2807';
+    font-size: 20px; }
+  .ellipsis_menu:hover ul {
+    z-index: 3;
+    display: block;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    width: 150px;
+    height: auto;
+    background: #FFF;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+    list-style-type: none;
+    margin: 0;
+    padding: 0; }
+    .ellipsis_menu:hover ul li {
+      padding: 0.75rem;
+      font-size: 0.8rem; }
+      .ellipsis_menu:hover ul li:hover {
+        background-color: #F0F0F0; }
 
 /*# sourceMappingURL=styles.css.map */

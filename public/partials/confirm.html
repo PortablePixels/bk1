@@ -1,0 +1,14 @@
+<div class="dialog confirm">
+  <!-- <header>
+    <button ng-click="bigInputCancel()">X</button>
+  </header> -->
+  <section class="pane">
+    <form>
+      <label ng-if="ui.big.title">
+        {% ui.big.title %}
+      </label>
+      <button ng-click="bigInputSubmit()" class="primary big">Yes</button>
+      <button ng-click="bigInputCancel()" class="big">No</button>
+    </form>
+  </section>
+</div>

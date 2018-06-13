@@ -1,10 +1,23 @@
 
-$nav-background: #333;
-$nav-color: #FFF;
-$link: blue;
+$purple: #a795ef;
+$green: #b0f0ab;
+$blue: #283ed8;
+$lavender: #bcc4f1;
+$seafoam: #cff4ed;
+$cantaloupe: #eabd91;
+$red: #dd3333;
+$white: #FFF;
+$pink: #D8117D;
+
+$divider: #CCC;
+
+$nav-background: #F0F0F0;
+$nav-color: $blue;
+$link: $blue;
+
+
 $table-header-color: #fff;
 $table-header-background: #333;
-$divider: #CCC;
 $zebra: #F8F7FF;
 $table-highlight: #F0F0F0;
 $table-highlight-selected: #FFFF99;
@@ -18,14 +31,6 @@ $button-padding: 0.5rem 1rem;
 $button-active-background: hotpink;
 $button-active-color: #fff;
 
-$purple: #a795ef;
-$green: #b0f0ab;
-$blue: #283ed8;
-$lavender: #bcc4f1;
-$seafoam: #cff4ed;
-$cantaloupe: #eabd91; // $red: #dd99be;
-$white: #FFF;
-$pink: #D8117D;
 
 $path-color: #CCC;
 
@@ -156,6 +161,7 @@ nav {
     flex-grow: 0;
     background-color: $nav-background;
     overflow-y: auto;
+    width: 80px;
 }
 
 nav ul {
@@ -174,6 +180,10 @@ nav ul li a {
 nav ul li .icon {
     font-size: 2rem;
     display: block;
+
+    img {
+      max-width: 50%;
+    }
 }
 
 nav ul li {
@@ -211,6 +221,17 @@ table.cells th {
 
 table.cells .right {
     text-align: right;
+}
+
+table.cells .ellipsis {
+  position: relative;
+  width: 20px;
+
+  .ellipsis_menu {
+    position: relative;
+    top: 0;
+    right: 0;
+  }
 }
 
 table.cells td,
@@ -266,6 +287,49 @@ table.cells tr.header {
     color: $table-header-color;
     box-shadow: 0 2px 5px rgba(0,0,0,0.25);
     z-index: 2;
+}
+
+
+button {
+    background: $toolbar-highlight;
+    border: 0;
+    padding: $button-padding;
+    // border: 1px solid transparent;
+    border-radius: 3px;
+    outline: none;
+
+    &.primary {
+      background-color: $green;
+      &:disabled {
+        color: $divider;
+        background: lighten($toolbar-highlight,10%);
+        &:hover {
+          background: lighten($toolbar-highlight,10%);
+        }
+      }
+    }
+
+    &.big {
+      font-size: 1.25rem;
+    }
+
+    &:disabled {
+        color: $divider;
+
+        &:hover {
+            background: lighten($toolbar-highlight,10%);
+        }
+    }
+
+    &:hover {
+      background: $button-active-background;
+      color: $button-active-color;
+    }
+
+    &:active {
+        background: $button-active-background;
+        color: $button-active-color;
+    }
 }
 
 .toolbar {
@@ -363,9 +427,12 @@ table.cells tr.header {
     padding: 0;
 
     h2 {
-      border-bottom: 1px solid $divider;
-      padding: $horizontal-padding;
+      // border-bottom: 1px solid $divider;
+      // padding: $horizontal-padding;
       margin: 0;
+
+      // padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
 
     &:last-child {
@@ -402,19 +469,36 @@ table.cells tr.header {
       border-bottom: 1px solid $divider;
     }
 
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
+    .threads {
+      ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
 
-      li {
-        list-style-type: disc;
-        list-style-position: inside;
+        li {
+          // list-style-type: disc;
+          // list-style-position: inside;
+          // list-style-type: none;
+          padding: 0.25rem 0.5rem;
+          position: relative;
 
-        &.selected {
-          background: $table-highlight;
+          .ellipsis_menu {
+            display: none;
+          }
+
+          &.selected {
+            // background: $table-highlight;
+            background: $lavender;
+
+            .ellipsis_menu {
+              display: block;
+              top: 0.25rem;
+              right: 0.5rem;
+            }
+
+          }
+
         }
-
       }
 
     }
@@ -474,6 +558,8 @@ table.cells tr.header {
     padding-bottom: 0.5rem;
     border-left: 10px solid transparent;
     padding-left: 1rem;
+    padding-right: 1rem;
+    position: relative;
 
     &:nth-child(2n+1) {
       // border-left: 10px solid $zebra;
@@ -594,10 +680,33 @@ table.cells tr.header {
       overflow: hidden;
 
         header {
-          border-bottom: 1px solid $divider;
+          // border-bottom: 1px solid $divider;
           padding: $dialog-header-padding;
 
           position: relative;
+
+          .x {
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            border-top-left-radius: 0;
+
+            background: transparent;
+
+            &:hover {
+                background: $toolbar-highlight;
+            }
+
+            &:active {
+                background: $button-active-background;
+                color: $button-active-color;
+            }
+
+
+
+          }
 
           .right {
             position: absolute;
@@ -957,4 +1066,90 @@ label.tag {
 
   }
 
+}
+
+.dialog_overlay .confirm {
+
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  overflow: hidden;
+  max-width: 600px;
+  .pane {
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+}
+
+.dialog_overlay .bigInput {
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+
+  input[type="text"] {
+    &.error {
+      border: 1px solid $red;
+    }
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .error {
+    font-weight: normal;
+    color: $red;
+  }
+
+}
+
+.ellipsis_menu {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  ul {
+    display: none;
+    // width: 0;
+    // height: 0;
+    // overflow: hidden;
+    // transition: 0.25s all linear;
+  }
+  &:after {
+    content: '\2807';
+    font-size: 20px;
+  }
+
+  &:hover {
+    ul {
+      z-index: 3;
+      display: block;
+      position: absolute;
+      top: -0.5rem;
+      right: -0.5rem;
+      width: 150px;
+      height: auto;
+      background: #FFF;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        padding: $horizontal-padding;
+        font-size: 0.8rem;
+
+        &:hover {
+          background-color: $table-highlight;
+        }
+      }
+
+    }
+  }
 }

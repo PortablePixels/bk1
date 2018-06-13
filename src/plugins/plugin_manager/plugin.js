@@ -55,7 +55,7 @@ module.exports = function(botkit) {
         menu: [{
             title: 'Plugins',
             url: '/admin/plugins',
-            icon: '⚙️',
+            icon: '<img src="/icons/gear.png"/>',
         }],
         init: function() {
             botkit.webserver.use("/plugins/plugins", express.static(__dirname + "/public"));
