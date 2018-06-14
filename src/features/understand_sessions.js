@@ -1,5 +1,6 @@
 var debug = require('debug')('botkit:sessions');
 var events_to_evaluate = [];
+var clone = require('clone');
 
 var session_schema ={
   user: {
@@ -56,6 +57,23 @@ module.exports = function(botkit) {
       });
     }
 
+    botkit.removeTempFields = function(script) {
+
+      var clean = clone(script);
+      // generate message ids for every message
+      clean.script.map(function(thread) {
+        for (var m = 0; m < thread.script.length; m++) {
+          for (var key in thread.script[m]) {
+            if (key.match(/^\$/)) {
+              delete(thread.script[m][key]);
+            }
+          }
+        }
+      })
+
+      return clean;
+    }
+
     botkit.storeConversationState = function(convo) {
         return new Promise(function(resolve, reject) {
             botkit.db.sessions.findOneAndUpdate({
@@ -65,7 +83,7 @@ module.exports = function(botkit) {
                 user: convo.context.user,
                 channel: convo.context.channel,
                 state: convo.state,
-                script: convo.script,
+                script: botkit.removeTempFields(convo.script),
                 lastActive: new Date(),
             }, {upsert: true}, function(err, res) {
                 if (err) {

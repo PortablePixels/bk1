@@ -187,5 +187,26 @@ module.exports = function(botkit) {
 
     });
 
+    botkit.addEars(function(trigger, message) {
+      return new Promise(function(resolve, reject) {
+        if (trigger.type == 'isset') {
+          if (message.text != '') {
+            return resolve(true);
+          }
+        }
+        resolve(false);
+      });
+    },'isset','is set');
+
+    botkit.addEars(function(trigger, message) {
+      return new Promise(function(resolve, reject) {
+        if (trigger.type == 'isnotset') {
+          if (message.text == '') {
+            return resolve(true);
+          }
+        }
+        resolve(false);
+      });
+    },'isnotset','is not set');
 
 }

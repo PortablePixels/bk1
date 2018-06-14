@@ -409,10 +409,26 @@ button {
   right: 0;
   bottom: 0;
 
-  & > header {
-    flex: 0;
-    padding: $horizontal-padding;
+  .toolbar {
+    border-top: 0;
+    border-bottom: 1px solid $divider;
   }
+
+  & > header {
+    padding: $horizontal-padding;
+    display: flex;
+  }
+
+  .leftbit {
+
+      @media all and (max-width: 1000px) {
+        display: none;
+      }
+
+      flex: 0 1 300px;
+  }
+
+
 
   & > section {
     flex: 1;
@@ -1152,4 +1168,14 @@ label.tag {
 
     }
   }
+}
+
+.branch-title,
+.parameter {
+    padding: 0.25rem 1rem;
+    border-radius: 20px;
+    background: $green;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

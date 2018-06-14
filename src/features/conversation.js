@@ -163,6 +163,12 @@ module.exports = function(botkit) {
                     that.script = script;
                 }
 
+                // generate message ids for every message
+                that.script.script.map(function(thread) {
+                  for (var m = 0; m < thread.script.length; m++) {
+                    thread.script[m].$mid = that.script.command + '-' + thread.topic + '-' + m;
+                  }
+                })
 
                 for (var x = 0; x < that.script.script.length; x++) {
                     that.threads[that.script.script[x].topic] = that.script.script[x].script;
@@ -293,7 +299,7 @@ module.exports = function(botkit) {
                         // generate a message id that identifies this message
                         // TODO: make sure this field name doesn't cause issues.
                         // TODO: consider: $fields get pruned before sending?
-                        reply.$mid = that.script.command + '-' + that.state.thread + '-' + that.state.cursor;
+                        // reply.$mid = that.script.command + '-' + that.state.thread + '-' + that.state.cursor;
 
                         // send only if it has some real payload
                         // TODO: there should be a better way to indicate messages not to send

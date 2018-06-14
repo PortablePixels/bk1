@@ -248,9 +248,17 @@ button {
   left: 80px;
   right: 0;
   bottom: 0; }
+  .workspace .toolbar {
+    border-top: 0;
+    border-bottom: 1px solid #CCC; }
   .workspace > header {
-    flex: 0;
-    padding: 0.75rem; }
+    padding: 0.75rem;
+    display: flex; }
+  .workspace .leftbit {
+    flex: 0 1 300px; }
+    @media all and (max-width: 1000px) {
+      .workspace .leftbit {
+        display: none; } }
   .workspace > section {
     flex: 1;
     display: flex;
@@ -718,5 +726,14 @@ label.tag {
       font-size: 0.8rem; }
       .ellipsis_menu:hover ul li:hover {
         background-color: #F0F0F0; }
+
+.branch-title,
+.parameter {
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  background: #b0f0ab;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; }
 
 /*# sourceMappingURL=styles.css.map */
