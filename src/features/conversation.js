@@ -192,7 +192,11 @@ module.exports = function(botkit) {
 
 
         this.setVar = function(key, val) {
-            this.state.vars[key] = val;
+          if (val) {
+            this.state.vars[key] = val.trim();
+          } else {
+            delete(this.state.vars[key]);
+          }
         }
 
         this.getVar = function(key) {
@@ -208,7 +212,11 @@ module.exports = function(botkit) {
             if (!this.state.user_vars) {
                 this.state.user_vars = {};
             }
-            this.state.user_vars[key] = val;
+            if (val) {
+              this.state.user_vars[key] = val.trim();
+            } else {
+              delete(this.state.user_vars[key]);
+            }
         }
 
 
@@ -229,7 +237,6 @@ module.exports = function(botkit) {
             debug('Kickoff script', that.script.command, that.state);
             return new Promise(function(resolve, reject) {
                 that.onready().then(function() {
-
                     if (force || that.state.turn === 0) {
                         botkit.middleware.beforeScript.run(that, function(err, that) {
                             if (err) {

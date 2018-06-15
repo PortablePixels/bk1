@@ -11,3 +11,4 @@ Completely rebuilt from the ground up to ease development of conversational soft
 * think about what happens if a persisted convo gets auto-closed or overwritten.  is there a timeout? is there an end event?
 * how to stash info about a user OUTSIDE of a convo like in a middleware or event handler
 * now that variables are persisted automatically -- what happens if you want to reset them?
+* if a studio.before handler calls executeScript, it can result in double firing events because the event queue continues to process events after the original before is called and can reach the new event AGAIN. can be solved by clever ordering of events in code but not ideal!! this is kind of caused by the fact that studio.before wraps middleware.beforeScript, which fires for every script instead of just the one in question.
