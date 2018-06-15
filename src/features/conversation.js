@@ -193,7 +193,11 @@ module.exports = function(botkit) {
 
         this.setVar = function(key, val) {
           if (val) {
-            this.state.vars[key] = val.trim();
+            if (val.trim) {
+              this.state.vars[key] = val.trim();
+            } else {
+              this.state.vars[key] = val;
+            }
           } else {
             delete(this.state.vars[key]);
           }
@@ -213,7 +217,11 @@ module.exports = function(botkit) {
                 this.state.user_vars = {};
             }
             if (val) {
-              this.state.user_vars[key] = val.trim();
+              if (val.trim) {
+                this.state.user_vars[key] = val.trim();
+              } else {
+                this.state.user_vars[key] = val;
+              }
             } else {
               delete(this.state.user_vars[key]);
             }
