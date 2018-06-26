@@ -11,8 +11,11 @@
 
 
 var debug = require('debug')('botkit:core');
+var fs = require('fs');
 
 module.exports = function(config) {
+
+    var skills_to_load = [];
 
     var botkit = {
         config: config,
@@ -59,10 +62,17 @@ module.exports = function(config) {
               });
             });
         },
+        loadSkill: function(path_to_skill) {
+            try {
+              require(path_to_skill)(botkit);
+            } catch(err) {
+              throw new Error(err);
+            }
+        },
         loadSkills: function(path) {
             var normalizedPath = require("path").join(path);
-            require("fs").readdirSync(normalizedPath).forEach(function(file) {
-              require(normalizedPath + "/" + file)(botkit);
+            fs.readdirSync(normalizedPath).forEach(function(file) {
+              botkit.loadSkill(normalizedPath + "/" + file);
             });
         },
         spawn: function(type,options) {

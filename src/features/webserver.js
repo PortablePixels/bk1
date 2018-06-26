@@ -1,6 +1,6 @@
 var express = require('express');
 var basicAuth = require('express-basic-auth')
-
+var path = require('path');
 var bodyParser = require('body-parser');
 // var querystring = require('querystring');
 var debug = require('debug')('botkit:webserver');
@@ -57,5 +57,16 @@ module.exports = function(botkit) {
 
     botkit.webserver = webserver;
     botkit.httpserver = server;
+
+    botkit.publicFolder = function(alias, path) {
+      botkit.webserver.use(alias, express.static(path))
+    }
+
+    botkit.localView = function(path_to_view) {
+      return path.relative(botkit.LIB_PATH + '/../views', path_to_view);
+    }
+
+
+
 
 };
