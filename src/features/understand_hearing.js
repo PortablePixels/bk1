@@ -36,12 +36,15 @@ module.exports = function(botkit) {
         }
     }
 
-    botkit.addEars = function(test_function, type, description) {
+    botkit.addEars = function(test_function, type, description, one_sided) {
         botkit.ears[type] = test_function;
         if (type && description) {
           botkit.earsList.push({
             type: type,
             description: description,
+            options: {
+              one_sided: one_sided ? true : false
+            }
           });
         }
     }
@@ -63,6 +66,8 @@ module.exports = function(botkit) {
         }
       });
     }
+
+
 
     // do basic regular expression tests
     botkit.addEars(function(trigger, message) {
@@ -189,6 +194,17 @@ module.exports = function(botkit) {
 
     botkit.addEars(function(trigger, message) {
       return new Promise(function(resolve, reject) {
+        if (trigger.type == 'event_type') {
+          if (message.type == trigger.pattern) {
+            return resolve(true);
+          }
+        }
+        resolve(false);
+      });
+    },'event_type','event type is');
+
+    botkit.addEars(function(trigger, message) {
+      return new Promise(function(resolve, reject) {
         if (trigger.type == 'isset') {
           if (message.text != '') {
             return resolve(true);
@@ -196,7 +212,7 @@ module.exports = function(botkit) {
         }
         resolve(false);
       });
-    },'isset','is set');
+    },'isset','is set', true);
 
     botkit.addEars(function(trigger, message) {
       return new Promise(function(resolve, reject) {
@@ -207,6 +223,6 @@ module.exports = function(botkit) {
         }
         resolve(false);
       });
-    },'isnotset','is not set');
+    },'isnotset','is not set', true);
 
 }

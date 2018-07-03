@@ -145,7 +145,7 @@ table.cells th {
     text-align: center; }
 
 table.cells tr:hover td {
-  background: #F0F0F0; }
+  background: #f0f0F0; }
 table.cells tr:hover.selected td {
   background: #FFFF99; }
 
@@ -193,10 +193,10 @@ button {
     button:disabled:hover {
       background: #f7f7f7; }
   button:hover {
-    background: hotpink;
+    background: #D8117D;
     color: #fff; }
   button:active {
-    background: hotpink;
+    background: #D8117D;
     color: #fff; }
 
 .toolbar {
@@ -223,6 +223,8 @@ button {
         padding: 0.5rem 1rem;
         border-radius: 3px;
         outline: none; }
+        .toolbar ul li button.hangry {
+          background: #b0f0ab; }
         .toolbar ul li button:disabled {
           color: #CCC; }
           .toolbar ul li button:disabled:hover {
@@ -230,7 +232,7 @@ button {
         .toolbar ul li button:hover {
           background: #DDD; }
         .toolbar ul li button:active {
-          background: hotpink;
+          background: #D8117D;
           color: #fff; }
     .toolbar ul.right {
       position: absolute;
@@ -248,9 +250,6 @@ button {
   left: 80px;
   right: 0;
   bottom: 0; }
-  .workspace .toolbar {
-    border-top: 0;
-    border-bottom: 1px solid #CCC; }
   .workspace > header {
     padding: 0.75rem;
     display: flex; }
@@ -313,7 +312,13 @@ button {
   .dialog_view header {
     flex: 0;
     padding: 0.75rem;
-    border-bottom: 1px solid #CCC; }
+    padding-left: calc(1rem + 10px);
+    border-bottom: 1px solid #CCC;
+    font-size: 0.75rem; }
+    .dialog_view header .trigger_list li {
+      display: inline-block;
+      margin-right: 1rem;
+      padding-bottom: 1rem; }
   .dialog_view .message_list {
     flex: 1;
     overflow-y: auto; }
@@ -373,8 +378,8 @@ button {
 .message_list .quick_reply {
   display: inline-block;
   border-radius: 20px;
-  color: purple;
-  border: 1px solid purple;
+  color: #283ed8;
+  border: 1px solid #283ed8;
   padding: 0.25rem 1rem;
   margin-right: 1rem;
   margin-top: 0.5rem; }
@@ -430,7 +435,7 @@ button {
           background: #DDD; }
         .dialog_overlay .dialog header .x:active,
         .edit_dialog_overlay .dialog header .x:active {
-          background: hotpink;
+          background: #D8117D;
           color: #fff; }
       .dialog_overlay .dialog header .right,
       .edit_dialog_overlay .dialog header .right {
@@ -497,19 +502,42 @@ button {
     top: 0.4rem; }
 
 .test {
-  padding: 0.25rem 1rem;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 20px;
-  background: #CCC;
+  border: 2px solid #a795ef;
+  color: #a795ef;
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis; }
+  .test .variable.right,
+  .test .utterance.right {
+    margin-right: -0.5rem;
+    margin-left: 0.25rem; }
+  .test .variable.left,
+  .test .utterance.left {
+    margin-left: -0.5rem;
+    margin-right: 0.25rem; }
+
+.collapsed_logic {
+  font-size: 0.75rem;
+  color: #CCC; }
+
+.utterance {
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  background: #0077e5;
+  color: #FFF;
   white-space: nowrap;
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis; }
 
-.utterance {
+.warning {
   padding: 0.25rem 1rem;
   border-radius: 20px;
-  background: #0077e5;
-  color: #FFF;
+  background: #FFFFCC;
   white-space: nowrap;
   max-width: 150px;
   overflow: hidden;
@@ -532,6 +560,7 @@ button {
     top: 0.4rem; }
 
 .message_option {
+  font-size: 0.75rem;
   line-height: 2rem;
   width: auto;
   display: block;
@@ -546,7 +575,7 @@ button {
       border-left: 2px solid #CCC;
       border-bottom: 2px solid #CCC;
       height: 25px;
-      width: 20px;
+      width: 18px;
       position: absolute;
       left: -18px;
       top: -10px; }
@@ -586,17 +615,17 @@ button {
     padding: 0.25rem 0.5rem;
     padding-right: 0;
     border-radius: 20px;
-    background: #ccc;
+    border: 2px solid #CCC;
+    color: #666;
     white-space: nowrap; }
   .message_option .variable {
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 20px;
     white-space: nowrap;
-    font-size: 20px;
     display: inline; }
   .message_option .branch-title,
   .message_option .parameter {
-    padding: 0.25rem 1rem;
+    padding: 0.25rem 0.5rem;
     border-radius: 20px;
     background: #b0f0ab;
     white-space: nowrap;
@@ -614,6 +643,9 @@ button {
     flex-grow: 0;
     flex-shrink: 0; }
 
+p label {
+  display: block; }
+
 label.tag {
   font-size: 0.8rem;
   padding: 0.25rem 0.5rem;
@@ -628,20 +660,31 @@ label.tag {
 
 .variable {
   border-radius: 20px;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  white-space: nowrap;
   color: #000;
   background: #d6edf7;
   display: inline-block; }
 
 .execute_script_widget {
   display: flex; }
+  .execute_script_widget button.select {
+    position: absolute;
+    top: 1rem;
+    right: 1rem; }
+  .execute_script_widget header {
+    background: #333;
+    color: #fff;
+    padding: 0 !important; }
+    .execute_script_widget header p {
+      margin: 0; }
   .execute_script_widget .current_action {
     flex-shrink: 0;
     flex-grow: 1;
-    flex-basis: 300px;
+    position: relative;
     overflow: auto;
-    border-right: 1px solid #CCC;
-    padding: 0.75rem;
-    background-color: #CCC; }
+    padding: 0.75rem; }
     .execute_script_widget .current_action .message_option .action {
       border: 2px solid #666666; }
   .execute_script_widget .script_browser {
@@ -652,6 +695,9 @@ label.tag {
     .execute_script_widget .script_browser form {
       padding: 0.75rem;
       border-bottom: 1px solid #CCC; }
+    .execute_script_widget .script_browser .starting_points {
+      flex: 1;
+      flex-basis: 600px; }
     .execute_script_widget .script_browser .script_results {
       display: flex;
       width: 100%; }
@@ -662,17 +708,18 @@ label.tag {
         border-right: 1px solid #CCC; }
         .execute_script_widget .script_browser .script_results .scripts .active {
           background-color: #ffffCC; }
-      .execute_script_widget .script_browser .script_results .starting_points {
-        flex-basis: 600px;
-        flex-grow: 0;
-        flex-shrink: 1; }
       .execute_script_widget .script_browser .script_results ul {
         list-style-type: none;
         margin: 0;
         padding: 0; }
         .execute_script_widget .script_browser .script_results ul li {
           border-bottom: 1px solid #CCC;
-          padding: 0.75rem; }
+          padding: 0.75rem;
+          position: relative; }
+          .execute_script_widget .script_browser .script_results ul li:nth-child(2n+1) {
+            background: #F8F7FF; }
+          .execute_script_widget .script_browser .script_results ul li:hover {
+            background: #f0f0F0; }
 
 .dialog_overlay .confirm {
   top: 50%;
@@ -725,7 +772,7 @@ label.tag {
       padding: 0.75rem;
       font-size: 0.8rem; }
       .ellipsis_menu:hover ul li:hover {
-        background-color: #F0F0F0; }
+        background-color: #f0f0F0; }
 
 .branch-title,
 .parameter {
@@ -735,5 +782,52 @@ label.tag {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis; }
+
+.script_triggers {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #CCC;
+  margin-bottom: 1rem; }
+  .script_triggers .triggers, .script_triggers .action {
+    flex-shrink: 1;
+    flex-basis: 50%;
+    padding: 1rem; }
+    .script_triggers .triggers input, .script_triggers .triggers select, .script_triggers .triggers button, .script_triggers .action input, .script_triggers .action select, .script_triggers .action button {
+      font-size: 1.25rem; }
+  .script_triggers .triggers {
+    border-right: 1px solid #CCC; }
+
+.trigger_list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+  .trigger_list li {
+    padding-bottom: 1rem; }
+    .trigger_list li:last-child {
+      padding-bottom: 0; }
+
+.condition_row {
+  display: flex;
+  flex-direction: row;
+  font-size: 1.5rem;
+  border: 1px solid #CCC;
+  border-top: 0px;
+  margin-bottom: 1rem; }
+  .condition_row:first-of-type {
+    border-top: 1px solid #CCC;
+    margin-bottom: 0; }
+  .condition_row .variable {
+    font-size: 1.1rem; }
+  .condition_row input, .condition_row select, .condition_row button {
+    font-size: 1.1rem; }
+  .condition_row .title {
+    flex-basis: 100px;
+    border-right: 1px solid #CCC; }
+  .condition_row .more_stuff {
+    flex-grow: 1; }
+  .condition_row .xbutton {
+    flex-basis: 50px; }
+  .condition_row > div {
+    padding: 10px; }
 
 /*# sourceMappingURL=styles.css.map */

@@ -13,7 +13,13 @@ app.controller('app', ['$scope', '$http', '$location', '$sce', function($scope, 
   $scope.goto = function(url) {
     window.location = url;
   }
-  
+
+  document.addEventListener('keyup', function(event) {
+    if (event.which == 27) {
+      $scope.$broadcast('escape_key');
+    }
+  });
+
   $scope.swallow = function($event) {
     $event.stopPropagation();
   }

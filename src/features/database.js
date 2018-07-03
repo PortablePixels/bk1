@@ -10,7 +10,7 @@ module.exports = function(botkit) {
   }
 
   // TODO: a password with an unescaped char causes an unhandled rejection somewhere in here!
-  
+
   mongoose.connect(process.env.MONGO_URI, {
   });
 
@@ -27,6 +27,7 @@ module.exports = function(botkit) {
 
   botkit.db = {
     mongoose: db,
+    schema: Schema,
     addModel: function(model, name, key) {
         botkit.db[key] = mongoose.model(name, new Schema(model), key);
     }
