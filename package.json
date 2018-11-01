@@ -1,13 +1,13 @@
 {
   "name": "botkit",
   "version": "1.0.0",
-  "description": "",
+  "description": "Building blocks for building bots",
   "main": "src/Core.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "benbrown@gmail.com",
+  "license": "MIT",
   "dependencies": {
     "async": "^2.6.1",
     "body-parser": "^1.18.2",
