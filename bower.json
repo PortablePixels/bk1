@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "angular-drag-and-drop-lists": "^2.1.0",
-    "angular": "^1.7.0",
+    "angular": "^1.7.5",
     "angular-clipboard": "^1.6.2"
   }
 }
