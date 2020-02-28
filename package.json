@@ -17,9 +17,9 @@
     "express": "^4.16.2",
     "express-basic-auth": "^1.1.3",
     "ezq": "git+https://github.com/howdyai/ezq.git#master",
-    "hbs": "^4.0.1",
+    "hbs": "^4.1.0",
     "http": "0.0.0",
-    "mongoose": "^5.0.18",
+    "mongoose": "^5.9.2",
     "mustache": "^2.3.0",
     "path": "^0.12.7",
     "ware": "^1.3.0"
