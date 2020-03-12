@@ -459,24 +459,46 @@ module.exports = function(botkit) {
                     botkit.middleware.afterScript.run(that, function(err, that) {
 
 
-                        that.state.transition_from = that.script.command;
+                        if (err) {
 
-                        // reset script and state
-                        that.state.cursor = 0;
-                        that.state.thread = 'default';
-                        that.ingestScript(script).then(function() {
-                            if (options.thread && options.thread != 'default') {
-                                that.kickoff(true).then(function() {
-                                    that.gotoThread(options.thread).then(resolve).catch(reject)
-                                }).catch(reject);
-                            } else {
-                                // call any before things
-                                that.kickoff(true).then(resolve).catch(reject);
-                            }
-                        }).catch(reject);
+                            console.error('Could not run afterScript', err);
+                            console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
+                            reject(err);
+
+                        }  else {
+                          
+                            that.state.transition_from = that.script.command;
+
+                            // reset script and state
+                            that.state.cursor = 0;
+                            that.state.thread = 'default';
+                            that.ingestScript(script).then(function() {
+                                if (options.thread && options.thread != 'default') {
+                                    that.kickoff(true).then(function() {
+                                        that.gotoThread(options.thread).then(resolve).catch(reject)
+                                    }).catch(reject);
+                                } else {
+                                    // call any before things
+                                    that.kickoff(true).then(resolve).catch(reject);
+                                }
+                            }).catch(function(err) {
+
+                                console.error('Injesting Script Failed', err);
+                                console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
+                                reject();
+
+                            });
+
+                        }
                     });
 
-                }).catch(reject);
+                }).catch(function(err) {
+
+                    console.error('getScript Failed', err);
+                    console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
+                    reject();
+                                
+                });
             })
         }
 
