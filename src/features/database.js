@@ -10,7 +10,7 @@ module.exports = function(botkit) {
   }
 
   // TODO: a password with an unescaped char causes an unhandled rejection somewhere in here!
-  mongoose.connect(process.env.MONGO_URI,  mongoose.connect(process.env.MONGO_URI, {useFindAndModify:false,useNewUrlParser:true,useUnifiedTopology:true}));
+  mongoose.connect(process.env.MONGO_URI, {useFindAndModify:false,useNewUrlParser:true,useUnifiedTopology:true});
 
   mongoose.Promise = global.Promise;
 
