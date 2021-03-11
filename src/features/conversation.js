@@ -370,7 +370,7 @@ module.exports = function(botkit) {
                             that.state.cursor++;
                             that.replies.push(that.processTemplate(reply));
                             // pause for response
-                            if (reply.collect) {
+                            if (reply.collect || (reply.quick_replies && reply.quick_replies.length > 0)) {
                                 botkit.storeConversationState(that).then(function() {
                                     resolve(that.replies);
                                 });
