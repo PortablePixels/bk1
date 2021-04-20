@@ -15,7 +15,9 @@ function Studio(config){
       var headers = {
           'content-type': 'application/json',
       };
-      options.uri = options.uri + '?access_token=' + sdk.config.studio_token;
+
+      const parameterJoin = options.uri.includes("?") ? "&" : "?";
+      options.uri = options.uri + parameterJoin +'access_token=' + sdk.config.studio_token;
       options.headers = headers;
       request(options, function(err, res, body) {
         if (err) {
@@ -74,11 +76,10 @@ function Studio(config){
   };
 
   sdk.getScriptById = function(id, user) {
-      var url = '/api/v1/commands/id';
+      var url = `/api/v1/commands/${id}`;
       return sdk.studioAPI({
           uri: url,
-          method: 'post',
-          form: {id: id, user: user},
+          method: 'get',
       });
   };
 

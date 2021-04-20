@@ -462,7 +462,6 @@ module.exports = function(botkit) {
                         if (err) {
 
                             console.error('Could not run afterScript', err);
-                            console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
                             reject(err);
 
                         }  else {
@@ -484,8 +483,7 @@ module.exports = function(botkit) {
                             }).catch(function(err) {
 
                                 console.error('Injesting Script Failed', err);
-                                console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
-                                reject();
+                                reject(err);
 
                             });
 
@@ -495,8 +493,7 @@ module.exports = function(botkit) {
                 }).catch(function(err) {
 
                     console.error('getScript Failed', err);
-                    console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
-                    reject();
+                    reject(err);
                                 
                 });
             })
