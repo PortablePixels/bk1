@@ -107,8 +107,26 @@ module.exports = function(config) {
               }
             });
           });
-        }
+        },
+
+        parseAdminUsers: function (string) {
+          if (!string) {
+              string = '';
+          }
+    
+          const creds = string.split(/\s+/);
+    
+          var users = {};
+          creds.forEach(function (u) {
+              const bits = u.split(/\:/);
+              users[bits[0]] = bits[1];
+          });
+    
+          return users;
+    
+      }
     }
+
 
     // basic emitting and handling of events
     require(__dirname + '/features/events.js')(botkit);
