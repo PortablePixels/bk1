@@ -639,7 +639,6 @@ module.exports = function(botkit) {
         this.setChannel(message.channel);
         this.ingestScript(script).catch(function(err) {
             console.error('Error creating conversation', err);
-            console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
             throw new Error(err);
         });
 
