@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ObjectId = mongoose.Schema.Types.ObjectId;
 var debug = require('debug')('botkit:db');
 
 module.exports = function(botkit) {
@@ -9,8 +8,22 @@ module.exports = function(botkit) {
     throw new Error('Please specify a valid MONGO_URI in this applications .env');
   }
 
+  let connectionOptions = {
+    useFindAndModify:false,
+    useNewUrlParser:true,
+    useUnifiedTopology:true,
+    sslValidate: true,
+    sslCA: []
+  }
+
+  let tlsCAString = process.env.TLS_CA_STRING;
+  if(typeof tlsCAString !== "undefined"){
+    const tlsCA = tlsCAString.replace(/\\n/g, "\n"); //replace env var with real line breaks  
+    connectionOptions.sslCA = [tlsCA];
+  }
+
   // TODO: a password with an unescaped char causes an unhandled rejection somewhere in here!
-  mongoose.connect(process.env.MONGO_URI, {useFindAndModify:false,useNewUrlParser:true,useUnifiedTopology:true});
+  mongoose.connect(process.env.MONGO_URI, connectionOptions);
 
   mongoose.Promise = global.Promise;
 

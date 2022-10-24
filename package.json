@@ -1,6 +1,6 @@
 {
   "name": "botkit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Building blocks for building bots",
   "main": "src/Core.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "ezq": "git+https://github.com/howdyai/ezq.git#master",
     "hbs": "^4.1.0",
     "http": "0.0.0",
-    "mongoose": "^5.9.2",
+    "mongoose": "^5.13.15",
     "mustache": "^2.3.0",
     "path": "^0.12.7",
     "ware": "^1.3.0",
