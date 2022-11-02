@@ -36,28 +36,21 @@ module.exports = function(botkit) {
     const admins = botkit.parseAdminUsers(process.env.USERS || '');
     const allowAdminAccess = !(Object.entries(admins).length === 0);
 
-    if(allowAdminAccess){
-
-      var authFunction = basicAuth({
-        users: admins,
-        challenge: true,
-      });
-
-    } 
-
-    var authFunction = basicAuth({
-      users: botkit.config.admin_creds,
-      challenge: true,
-    });
-
     webserver.use(function(req, res, next) {
+      
+      const forwardedFor = req.headers['x-forwarded-for'];
+      const clientIP = typeof forwardedFor === "string" ? forwardedFor.split(', ') : [""];
+      const protocol = req.headers['x-forwarded-proto'];
+        
+      if(environment === 'local' || (protocol === 'https' && clientIP[0] === proxyIP)){
 
-      if(!req.secure && !environment === 'local'){
-          res.sendStatus(403);
-      } else {
         if (req.url.match(/\/admin\//)) {
 
           if(allowAdminAccess){
+            var authFunction = basicAuth({
+              users: admins,
+              challenge: true,
+            });
             authFunction(req, res, next);
           } else {
             res.sendStatus(403);
@@ -66,9 +59,11 @@ module.exports = function(botkit) {
         } else {
           next();
         }
+      } else {
+        res.sendStatus(403);
       }
     });
-
+    
     var server = http.createServer(webserver);
 
     server.listen(serverPort, null, function() {
