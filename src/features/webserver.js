@@ -32,6 +32,7 @@ module.exports = function(botkit) {
 
     const environment = process.env.APP_ENV || 'local';
     const serverPort = process.env.PORT || 3000;
+    const proxyIP = process.env.PROXY_IP || true;
     
     const admins = botkit.parseAdminUsers(process.env.USERS || '');
     const allowAdminAccess = !(Object.entries(admins).length === 0);
