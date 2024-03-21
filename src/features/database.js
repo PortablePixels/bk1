@@ -7,19 +7,11 @@ module.exports = function(botkit) {
   if (!process.env.MONGO_URI) {
     throw new Error('Please specify a valid MONGO_URI in this applications .env');
   }
-
+  
   let connectionOptions = {
-    useFindAndModify:false,
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-    sslValidate: true,
-    sslCA: []
-  }
-
-  let tlsCAString = process.env.TLS_CA_STRING;
-  if(typeof tlsCAString !== "undefined"){
-    const tlsCA = tlsCAString.replace(/\\n/g, "\n"); //replace env var with real line breaks  
-    connectionOptions.sslCA = [tlsCA];
+    tls: true,
+    useUnifiedTopology: true,
+    replicaSet: "replicaset"
   }
 
   // TODO: a password with an unescaped char causes an unhandled rejection somewhere in here!
