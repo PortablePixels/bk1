@@ -10,6 +10,7 @@ module.exports = function(botkit) {
   
   let connectionOptions = {
     tls: true,
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     replicaSet: "replicaset"
   }
