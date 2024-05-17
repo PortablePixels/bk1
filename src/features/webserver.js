@@ -30,30 +30,49 @@ module.exports = function(botkit) {
 
     webserver.use(express.static(__dirname + '/../../public'));
 
-    var authFunction = basicAuth({
-      users: { 'admin': 'supersecret' },
-      challenge: true,
-    });
+    const environment = process.env.APP_ENV || 'local';
+    const serverPort = process.env.PORT || 3000;
+    const proxyIP = process.env.PROXY_IP || true;
+    
+    const admins = botkit.parseAdminUsers(process.env.USERS || '');
+    const allowAdminAccess = !(Object.entries(admins).length === 0);
 
     webserver.use(function(req, res, next) {
-      if (req.url.match(/\/admin\//)) {
-        authFunction(req, res, next);
+      
+      const forwardedFor = req.headers['x-forwarded-for'];
+      const clientIP = typeof forwardedFor === "string" ? forwardedFor.split(', ') : [""];
+      const protocol = req.headers['x-forwarded-proto'];
+        
+      if(environment === 'local' || (protocol === 'https' && clientIP[0] === proxyIP)){
+
+        if (req.url.match(/\/admin\//)) {
+
+          if(allowAdminAccess){
+            var authFunction = basicAuth({
+              users: admins,
+              challenge: true,
+            });
+            authFunction(req, res, next);
+          } else {
+            res.sendStatus(403);
+          }
+      
+        } else {
+          next();
+        }
       } else {
-        next();
+        res.sendStatus(403);
       }
     });
-
+    
     var server = http.createServer(webserver);
 
-    server.listen(process.env.PORT || 3000, null, function() {
+    server.listen(serverPort, null, function() {
 
-        debug('Express webserver configured and listening at http://localhost:' + (process.env.PORT || 3000));
+        debug('Express webserver configured and listening at http://localhost:' + serverPort);
         botkit.trigger('boot:webserver_up',[]);
 
     });
-
-    // controller.webserver = webserver;
-    // controller.httpserver = server;
 
     botkit.webserver = webserver;
     botkit.httpserver = server;

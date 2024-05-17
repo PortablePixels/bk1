@@ -42,7 +42,7 @@ module.exports = function(botkit) {
 
     botkit.endSession = function(convo) {
       return new Promise(function(resolve, reject) {
-        botkit.db.sessions.remove({
+        botkit.db.sessions.deleteOne({
             user: convo.context.user,
             channel: convo.context.channel
         }, function(err, res) {

@@ -115,7 +115,7 @@ module.exports = function(botkit) {
         }
 
         // remove unnecessary fields
-        delete(message.platforms);
+        //delete(message.platforms); //disabling for attachment localisation
         next();
     });
 

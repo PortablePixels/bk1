@@ -370,7 +370,7 @@ module.exports = function(botkit) {
                             that.state.cursor++;
                             that.replies.push(that.processTemplate(reply));
                             // pause for response
-                            if (reply.collect) {
+                            if (reply.collect || (reply.quick_replies && reply.quick_replies.length > 0)) {
                                 botkit.storeConversationState(that).then(function() {
                                     resolve(that.replies);
                                 });
@@ -462,7 +462,6 @@ module.exports = function(botkit) {
                         if (err) {
 
                             console.error('Could not run afterScript', err);
-                            console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
                             reject(err);
 
                         }  else {
@@ -484,8 +483,7 @@ module.exports = function(botkit) {
                             }).catch(function(err) {
 
                                 console.error('Injesting Script Failed', err);
-                                console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
-                                reject();
+                                reject(err);
 
                             });
 
@@ -495,8 +493,7 @@ module.exports = function(botkit) {
                 }).catch(function(err) {
 
                     console.error('getScript Failed', err);
-                    console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
-                    reject();
+                    reject(err);
                                 
                 });
             })
@@ -642,7 +639,6 @@ module.exports = function(botkit) {
         this.setChannel(message.channel);
         this.ingestScript(script).catch(function(err) {
             console.error('Error creating conversation', err);
-            console.error('SWITCHING SCRIPT FROM ', that.script.command, 'TO', options.script);
             throw new Error(err);
         });
 
