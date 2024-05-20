@@ -33,6 +33,7 @@ module.exports = function(botkit) {
     const environment = process.env.APP_ENV || 'local';
     const serverPort = process.env.PORT || 3000;
     const proxyIP = process.env.PROXY_IP || true;
+    const requireHTTPS = process.env.REQUIRE_HTTPS || false;
     
     const admins = botkit.parseAdminUsers(process.env.USERS || '');
     const allowAdminAccess = !(Object.entries(admins).length === 0);
@@ -44,7 +45,7 @@ module.exports = function(botkit) {
       const protocol = req.headers['x-forwarded-proto'];
       const healthEndpoint = req.url.match(/\/service\/(health|readiness)\//);
         
-      if(environment === 'local' || healthEndpoint || (protocol === 'https' && clientIP[0] === proxyIP)){
+      if(environment === 'local' || healthEndpoint || ((protocol === 'https' && requireHTTPS) && clientIP[0] === proxyIP)){
 
         if (req.url.match(/\/admin\//)) {
 
