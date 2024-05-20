@@ -42,8 +42,9 @@ module.exports = function(botkit) {
       const forwardedFor = req.headers['x-forwarded-for'];
       const clientIP = typeof forwardedFor === "string" ? forwardedFor.split(', ') : [""];
       const protocol = req.headers['x-forwarded-proto'];
+      const healthEndpoint = req.url.match(/\/service\/(health|readiness)\//);
         
-      if(environment === 'local' || (protocol === 'https' && clientIP[0] === proxyIP)){
+      if(environment === 'local' || healthEndpoint || (protocol === 'https' && clientIP[0] === proxyIP)){
 
         if (req.url.match(/\/admin\//)) {
 
